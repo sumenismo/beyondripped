@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -42,43 +42,60 @@ export default function LoginForm() {
   }, [])
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Box pb={2}>
-        <Controller
-          name='username'
-          control={control}
-          render={({ field }) => (
-            <TextField size='small' placeholder='email' fullWidth {...field} />
-          )}
-        />
-      </Box>
-      <Box pb={2}>
-        <Controller
-          name='password'
-          control={control}
-          render={({ field }) => (
-            <TextField
-              size='small'
-              placeholder='password'
-              type='password'
-              fullWidth
-              {...field}
+    <Box display='flex' maxWidth={500} width='100%' justifyContent='center'>
+      <Paper
+        sx={{ width: '100%', padding: 4, border: '1px solid rgba(0,0,0,.2)' }}
+        elevation={0}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Box pb={2}>
+            <Typography align='center' variant='h6'>
+              Beyond Ripped
+            </Typography>
+          </Box>
+          <Box pb={2}>
+            <Controller
+              name='username'
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  size='small'
+                  placeholder='email'
+                  fullWidth
+                  {...field}
+                />
+              )}
             />
-          )}
-        />
-      </Box>
-      {isError ? (
-        <Box pb={2}>
-          <Typography variant='body1' color='error'>
-            Invalid username or password.
-          </Typography>
-        </Box>
-      ) : null}
-      <Box pb={2}>
-        <Button size='small' variant='contained' fullWidth type='submit'>
-          Login
-        </Button>
-      </Box>
-    </form>
+          </Box>
+          <Box pb={2}>
+            <Controller
+              name='password'
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  size='small'
+                  placeholder='password'
+                  type='password'
+                  fullWidth
+                  {...field}
+                />
+              )}
+            />
+          </Box>
+          {isError ? (
+            <Box pb={2}>
+              <Typography variant='body1' color='error'>
+                Invalid username or password.
+              </Typography>
+            </Box>
+          ) : null}
+          <Box pb={2}>
+            <Button size='small' variant='contained' fullWidth type='submit'>
+              Login
+            </Button>
+          </Box>
+        </form>
+      </Paper>
+    </Box>
   )
 }

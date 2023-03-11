@@ -11,9 +11,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (user && validate(password, user.password)) {
       res.json(user)
+    } else {
+      res.status(401).json({ error: 'Unauthorized' })
     }
-
-    res.status(401).json({ error: 'Unauthorized' })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error })

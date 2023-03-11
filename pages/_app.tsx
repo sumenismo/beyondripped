@@ -15,13 +15,10 @@ export interface MyAppProps extends AppProps {
 }
 
 export default function MyApp(props: MyAppProps) {
-  const {
-    Component,
-    emotionCache = clientSideEmotionCache,
-    pageProps: { session, ...pageProps }
-  } = props
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
+
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={pageProps.session}>
       <CacheProvider value={emotionCache}>
         <Head>
           <title>Beyond Ripped</title>

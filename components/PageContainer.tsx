@@ -1,6 +1,5 @@
-import { NavBar } from '@/components/NavBar'
 import { Box, Container } from '@mui/material'
-import { useSession } from 'next-auth/react'
+import { getSession } from 'next-auth/react'
 import React from 'react'
 
 export interface PageContainerProps {
@@ -8,8 +7,6 @@ export interface PageContainerProps {
 }
 
 export const PageContainer = ({ children }: PageContainerProps) => {
-  const { data } = useSession()
-
   return (
     <Container maxWidth='lg'>
       <Box
@@ -22,9 +19,16 @@ export const PageContainer = ({ children }: PageContainerProps) => {
           py: 4
         }}
       >
-        {data !== null && <NavBar />}
         {children}
       </Box>
     </Container>
   )
+}
+
+export async function getServerSideProps(ctx: any) {
+  return {
+    props: {
+      session: await getSession(ctx)
+    }
+  }
 }
