@@ -16,7 +16,7 @@ export default function Protected({ children }: ProtectedProps) {
 
   switch (role) {
     case 'ADMIN':
-      if (router.route.includes('dashboard')) {
+      if (router.route.includes('admin')) {
         return (
           <Box>
             <NavBar />
