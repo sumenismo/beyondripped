@@ -1,43 +1,40 @@
-import clientPromise from '@/lib/mongodb'
-import { Typography } from '@mui/material'
 import { GetServerSidePropsContext } from 'next'
+import { getSession, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
-export interface HomeProps {
-  isConnected: Boolean
-}
+export type Role = 'ADMIN' | 'MEMBER' | 'FINANCE'
 
-export default function Home({ isConnected }: HomeProps) {
-  return (
-    <>
-      <Typography variant='h4' component='h1' gutterBottom>
-        Welcome to Beyond Ripped
-      </Typography>
-      {isConnected && (
-        <Typography variant='caption'>Connected to DB</Typography>
-      )}
-    </>
-  )
+export default function Home() {
+  const { data } = useSession()
+  const role = (data?.user as any)?.role
+  const { push } = useRouter()
+
+  useEffect(() => {
+    switch (role) {
+      case 'ADMIN':
+        push('/admin')
+        break
+      case 'MEMBER':
+        push('/member')
+        break
+      case 'FINANCE':
+        push('/finance')
+        break
+
+      default:
+        push('/auth/signin')
+        break
+    }
+  }, [role])
+
+  return <></>
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    await clientPromise
-    // `await clientPromise` will use the default database passed in the MONGODB_URI
-    // However you can use another database (e.g. myDatabase) by replacing the `await clientPromise` with the following code:
-    //
-    // `const client = await clientPromise`
-    // `const db = client.db("myDatabase")`
-    //
-    // Then you can execute queries against your database like so:
-    // db.find({}) or any of the MongoDB Node Driver commands
-
-    return {
-      props: { isConnected: true }
-    }
-  } catch (e) {
-    console.error(e)
-    return {
-      props: { isConnected: false }
+  return {
+    props: {
+      session: await getSession(context)
     }
   }
 }

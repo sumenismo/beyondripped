@@ -39,7 +39,7 @@ export const authOptions = {
 
       async authorize(credentials, req) {
         let user = null
-        const url = `${process.env.NEXTAUTH_URL}/api/user/auth`
+        const url = `${process.env.NEXTAUTH_URL}/api/userAuth`
         const res: any = await fetch(url, {
           method: 'POST',
           body: JSON.stringify(credentials),

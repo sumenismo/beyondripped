@@ -12,7 +12,10 @@
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.6",
+    "@hookform/resolvers": "^2.9.11",
+    "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.12",
+    "@mui/x-date-pickers": "^6.0.1",
     "@types/node": "18.15.0",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
@@ -20,11 +23,21 @@
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "mongodb": "^5.1.0",
+    "mongoose": "^7.0.1",
     "next": "13.2.4",
     "next-auth": "^4.20.1",
+    "nodemailer": "^6.9.1",
+    "nodemailer-smtp-transport": "^2.7.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.5",
-    "typescript": "4.9.5"
+    "typescript": "4.9.5",
+    "uuid": "^9.0.0",
+    "voucher-code-generator": "^1.3.0",
+    "yup": "^1.0.2",
+    "yup-password": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/voucher-code-generator": "^1.1.1"
   }
 }

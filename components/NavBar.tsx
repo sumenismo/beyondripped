@@ -1,9 +1,14 @@
 import Link from '@/components/Link'
+import { Role } from '@/pages'
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import { signOut } from 'next-auth/react'
 
-export const NavBar = () => {
+export interface NavBarProps {
+  role: Role
+}
+
+export const NavBar = ({ role }: NavBarProps) => {
   return (
     <AppBar>
       <Container maxWidth='xl'>
@@ -16,20 +21,24 @@ export const NavBar = () => {
               Beyond Ripped
             </Typography>
             <Typography sx={{ color: '#FFF' }}>|</Typography>
-            <Link
-              sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
-              color='#FFF'
-              href='/admin/members'
-            >
-              Members
-            </Link>
-            <Link
-              sx={{ textDecoration: 'none', mr: 2 }}
-              color='#FFF'
-              href='/admin/finance'
-            >
-              Finance
-            </Link>
+            {role === 'ADMIN' && (
+              <>
+                <Link
+                  sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
+                  color='#FFF'
+                  href='/admin/members'
+                >
+                  Members
+                </Link>
+                <Link
+                  sx={{ textDecoration: 'none', mr: 2 }}
+                  color='#FFF'
+                  href='/admin/finance'
+                >
+                  Finance
+                </Link>
+              </>
+            )}
           </Box>
           <Button color='inherit' onClick={() => signOut()}>
             Logout

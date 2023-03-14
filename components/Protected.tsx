@@ -19,7 +19,7 @@ export default function Protected({ children }: ProtectedProps) {
       if (router.route.includes('admin')) {
         return (
           <Box>
-            <NavBar />
+            <NavBar role='ADMIN' />
             {children}
           </Box>
         )
@@ -30,7 +30,7 @@ export default function Protected({ children }: ProtectedProps) {
       if (router.route.includes('finance')) {
         return (
           <Box>
-            <NavBar />
+            <NavBar role='FINANCE' />
             {children}
           </Box>
         )
@@ -41,7 +41,7 @@ export default function Protected({ children }: ProtectedProps) {
       if (router.route.includes('member')) {
         return (
           <Box>
-            <NavBar />
+            <NavBar role='MEMBER' />
             {children}
           </Box>
         )

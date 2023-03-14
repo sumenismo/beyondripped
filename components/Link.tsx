@@ -6,7 +6,11 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 // Add support for the sx prop for consistency with the other branches.
-const Anchor = styled('a')({})
+const Anchor = styled('a')({
+  '&.active': {
+    fontWeight: 'bold'
+  }
+})
 
 interface NextLinkComposedProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>,
