@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     switch (role) {
       case 'ADMIN':
-        push('/admin')
+        push('/admin/members')
         break
       case 'MEMBER':
         push('/member')

@@ -1,5 +1,5 @@
 import { NavBar } from '@/components/NavBar'
-import { Box } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import { getSession, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -12,44 +12,45 @@ export default function Protected({ children }: ProtectedProps) {
   const { data } = useSession()
   const router = useRouter()
 
+  const base = router.pathname.split('/')[1]
   const role = (data?.user as any)?.role
 
   switch (role) {
     case 'ADMIN':
-      if (router.route.includes('admin')) {
+      if (base.includes('admin')) {
         return (
-          <Box>
+          <Box width='100%' pt={3}>
             <NavBar role='ADMIN' />
-            {children}
+            <Container>{children}</Container>
           </Box>
         )
       }
       return <Box>403</Box>
 
     case 'FINANCE':
-      if (router.route.includes('finance')) {
+      if (base.includes('finance')) {
         return (
-          <Box>
+          <Box width='100%' pt={3}>
             <NavBar role='FINANCE' />
-            {children}
+            <Container>{children}</Container>
           </Box>
         )
       }
       return <Box>403</Box>
 
     case 'MEMBER':
-      if (router.route.includes('member')) {
+      if (base.includes('member')) {
         return (
-          <Box>
+          <Box width='100%' pt={3}>
             <NavBar role='MEMBER' />
-            {children}
+            <Container>{children}</Container>
           </Box>
         )
       }
       return <Box>403</Box>
 
     default:
-      return <Box>403</Box>
+      return <Box></Box>
   }
 }
 

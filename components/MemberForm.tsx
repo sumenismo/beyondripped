@@ -1,5 +1,6 @@
 import { ControlledInput } from '@/components/forms/ControlledInput'
 import { PTextField } from '@/components/forms/PTextField'
+import { Role } from '@/pages'
 import { adminMemberFormValidationSchema } from '@/validation/adminMemberFormValidationSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Button, Paper, Typography } from '@mui/material'
@@ -8,9 +9,14 @@ import { useForm } from 'react-hook-form'
 
 export interface MemberFormValues {
   email: string
+  name: string
 }
 
-export const MemberForm = () => {
+export interface MemberFormProps {
+  role: Role
+}
+
+export const MemberForm = ({ role }: MemberFormProps) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -18,7 +24,8 @@ export const MemberForm = () => {
     useForm<MemberFormValues>({
       resolver: yupResolver(adminMemberFormValidationSchema),
       defaultValues: {
-        email: ''
+        email: '',
+        name: ''
       }
     })
 
@@ -28,7 +35,7 @@ export const MemberForm = () => {
       const url = `/api/admin/user`
       const res: any = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify({ ...args, role: 'MEMBER' }),
+        body: JSON.stringify({ ...args, role }),
         headers: { 'Content-Type': 'application/json' }
       })
       if (res.status === 409) {
@@ -39,7 +46,7 @@ export const MemberForm = () => {
       if (res.status === 201) {
         clearErrors()
         setIsSuccess(true)
-        reset({ email: '' })
+        reset({ email: '', name: '' })
       }
     } catch (error: any) {
       console.log(error)
@@ -55,9 +62,21 @@ export const MemberForm = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box pb={2}>
-          <Typography align='center' variant='h6'>
-            Add New Member
+          <Typography align='center' variant='h6' textTransform='capitalize'>
+            Add New {role.toLocaleLowerCase()}
           </Typography>
+        </Box>
+        <Box pb={2}>
+          <ControlledInput
+            name='name'
+            placeholder='Name'
+            control={control}
+            component={PTextField}
+            fullWidth
+            inputProps={{
+              autoComplete: 'off'
+            }}
+          />
         </Box>
         <Box pb={2}>
           <ControlledInput

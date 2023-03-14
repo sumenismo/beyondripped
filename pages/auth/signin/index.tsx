@@ -4,21 +4,6 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-const getDefaultCallbackUrl = (role?: 'ADMIN' | 'MEMBER' | 'FINANCE') => {
-  switch (role) {
-    case 'ADMIN':
-      return '/admin'
-
-    case 'MEMBER':
-      return '/member'
-    case 'FINANCE':
-      return '/finance'
-
-    default:
-      return '/member'
-  }
-}
-
 export interface LoginFormValues {
   username: string
   password: string
@@ -28,9 +13,7 @@ export default function LoginForm() {
   const { data } = useSession()
   const router = useRouter()
 
-  const callbackUrl =
-    (router.query.callbackUrl as string) ??
-    getDefaultCallbackUrl((data?.user as any)?.role)
+  const callbackUrl = (router.query.callbackUrl as string) ?? '/'
 
   const error = router.query.error
   let isError = error !== undefined && error !== null
@@ -46,7 +29,7 @@ export default function LoginForm() {
     try {
       await signIn('credentials', {
         ...args,
-        callbackUrl: '/'
+        callbackUrl
       })
     } catch (error) {
       console.log(error)
@@ -56,7 +39,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (data) {
-      router.push(callbackUrl)
+      router.push('/')
     }
   }, [])
 

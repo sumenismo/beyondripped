@@ -4,7 +4,9 @@ import { Typography } from '@mui/material'
 export default function Dashboard() {
   return (
     <Protected>
-      <Typography variant='h1'>Protected</Typography>
+      <Typography variant='h6'>
+        Welcome to Beyond Ripped Admin Dashboard
+      </Typography>
     </Protected>
   )
 }
