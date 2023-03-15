@@ -39,7 +39,12 @@ export default function Members() {
           >
             <CloseIcon />
           </IconButton>
-          <MemberForm role='MEMBER' />
+          <MemberForm
+            role='MEMBER'
+            showIsSuccess
+            title='Add New Member'
+            submitButtonLabel='Add New Member'
+          />
         </Box>
       </Dialog>
     </Protected>

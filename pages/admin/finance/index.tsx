@@ -39,7 +39,12 @@ export default function Finance() {
           >
             <CloseIcon />
           </IconButton>
-          <MemberForm role='FINANCE' />
+          <MemberForm
+            role='FINANCE'
+            showIsSuccess
+            title='Add New Finance'
+            submitButtonLabel='Add New Finance'
+          />
         </Box>
       </Dialog>
     </Protected>

@@ -22,6 +22,17 @@ const verify = new mongoose.Schema({
   }
 })
 
+const activeDate = new mongoose.Schema({
+  start: {
+    type: Date,
+    require: false
+  },
+  end: {
+    type: Date,
+    require: false
+  }
+})
+
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   name: { type: String, required: false },
@@ -39,6 +50,10 @@ const UserSchema = new mongoose.Schema({
   referralCode: {
     type: String,
     required: true
+  },
+  activeDate: {
+    type: activeDate,
+    required: false
   },
   verify: {
     type: verify,

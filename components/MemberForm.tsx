@@ -10,13 +10,26 @@ import { useForm } from 'react-hook-form'
 export interface MemberFormValues {
   email: string
   name: string
+  referralCode?: string
 }
 
 export interface MemberFormProps {
   role: Role
+  showCodeInput?: boolean
+  showIsSuccess?: boolean
+  title?: string
+  submitButtonLabel?: string
+  successMessage?: string
 }
 
-export const MemberForm = ({ role }: MemberFormProps) => {
+export const MemberForm = ({
+  role,
+  showCodeInput = false,
+  showIsSuccess = false,
+  title = '',
+  submitButtonLabel = 'Submit',
+  successMessage = 'Success'
+}: MemberFormProps) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -25,7 +38,8 @@ export const MemberForm = ({ role }: MemberFormProps) => {
       resolver: yupResolver(adminMemberFormValidationSchema),
       defaultValues: {
         email: '',
-        name: ''
+        name: '',
+        referralCode: ''
       }
     })
 
@@ -35,7 +49,7 @@ export const MemberForm = ({ role }: MemberFormProps) => {
       const url = `/api/admin/user`
       const res: any = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify({ ...args, role }),
+        body: JSON.stringify({ ...args, role, code: args.referralCode }),
         headers: { 'Content-Type': 'application/json' }
       })
       if (res.status === 409) {
@@ -46,7 +60,7 @@ export const MemberForm = ({ role }: MemberFormProps) => {
       if (res.status === 201) {
         clearErrors()
         setIsSuccess(true)
-        reset({ email: '', name: '' })
+        reset({ email: '', name: '', referralCode: '' })
       }
     } catch (error: any) {
       console.log(error)
@@ -63,7 +77,7 @@ export const MemberForm = ({ role }: MemberFormProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box pb={2}>
           <Typography align='center' variant='h6' textTransform='capitalize'>
-            Add New {role.toLocaleLowerCase()}
+            {title}
           </Typography>
         </Box>
         <Box pb={2}>
@@ -90,6 +104,20 @@ export const MemberForm = ({ role }: MemberFormProps) => {
             }}
           />
         </Box>
+        {showCodeInput && (
+          <Box pb={2}>
+            <ControlledInput
+              name='referralCode'
+              placeholder='Referral Code'
+              control={control}
+              component={PTextField}
+              fullWidth
+              inputProps={{
+                autoComplete: 'off'
+              }}
+            />
+          </Box>
+        )}
         <Box pb={2}>
           <Button
             disabled={isLoading}
@@ -98,14 +126,14 @@ export const MemberForm = ({ role }: MemberFormProps) => {
             fullWidth
             type='submit'
           >
-            Add Member
+            {submitButtonLabel}
           </Button>
         </Box>
       </form>
-      {isSuccess ? (
+      {showIsSuccess && isSuccess ? (
         <Box>
           <Typography align='center' variant='body1' color='success.main'>
-            Member added!
+            {successMessage}
           </Typography>
         </Box>
       ) : null}
