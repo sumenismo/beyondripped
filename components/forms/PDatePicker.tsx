@@ -16,8 +16,10 @@ export const PDatePicker = ({
   return (
     <DesktopDatePicker
       label={label}
+      // @ts-ignore
       inputFormat='MM/dd/yyyy'
       value={value}
+      // @ts-ignore
       onChange={onChange}
       minDate={min}
       renderInput={(params: any) => (
