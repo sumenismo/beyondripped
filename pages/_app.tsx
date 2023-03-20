@@ -5,10 +5,12 @@ import { ThemeProvider } from '@mui/material/styles'
 import { SessionProvider } from 'next-auth/react'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import createEmotionCache from '../theme/createEmotionCache'
 import theme from '../theme/theme'
 
 const clientSideEmotionCache = createEmotionCache()
+const queryClient = new QueryClient()
 
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
@@ -27,9 +29,11 @@ export default function MyApp(props: MyAppProps) {
         </Head>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <PageContainer>
-            <Component {...pageProps} />
-          </PageContainer>
+          <QueryClientProvider client={queryClient}>
+            <PageContainer>
+              <Component {...pageProps} />
+            </PageContainer>
+          </QueryClientProvider>
         </ThemeProvider>
       </CacheProvider>
     </SessionProvider>

@@ -9,8 +9,6 @@ export default function Home() {
   const { data } = useSession()
   const role = (data?.user as any)?.role
   const { push } = useRouter()
-  console.log({ data })
-  console.log({ role })
 
   useEffect(() => {
     switch (role) {

@@ -32,6 +32,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (method) {
     case 'GET':
+      if (session?.user.role !== 'ADMIN') {
+        res.status(401).json({ success: false, error: 'Unauthorized' })
+        return
+      }
+
+      const roleQuery = req.query.role ?? 'MEMBER'
+      const user = await User.find({ role: roleQuery }).select('-password')
+      res.status(200).json({ success: true, data: user })
       break
 
     case 'POST':
