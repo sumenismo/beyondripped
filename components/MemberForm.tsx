@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Button, Paper, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useQueryClient } from 'react-query'
 
 export interface MemberFormValues {
   email: string
@@ -32,6 +33,7 @@ export const MemberForm = ({
 }: MemberFormProps) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
 
   const { control, handleSubmit, setError, clearErrors, reset } =
     useForm<MemberFormValues>({
@@ -61,6 +63,7 @@ export const MemberForm = ({
         clearErrors()
         setIsSuccess(true)
         reset({ email: '', name: '', referralCode: '' })
+        await queryClient.invalidateQueries('users-MEMBER')
       }
     } catch (error: any) {
       console.log(error)

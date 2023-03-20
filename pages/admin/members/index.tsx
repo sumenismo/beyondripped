@@ -10,7 +10,7 @@ import { useState } from 'react'
 export default function Members() {
   const [openMemberForm, setOpenMemberForm] = useState(false)
 
-  const { users, loading } = useGetUsers('MEMBER')
+  const { users, isLoading } = useGetUsers('MEMBER')
 
   return (
     <Protected>
@@ -25,7 +25,7 @@ export default function Members() {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            {loading ? (
+            {isLoading ? (
               <Typography>Loading...</Typography>
             ) : (
               <MemberList members={users} />

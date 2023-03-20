@@ -15,7 +15,7 @@ export const useGetUsers = (role: Role) => {
   const { data, isLoading } = useQuery(`users-${role}`, getUsers)
 
   return {
-    loading: isLoading,
+    isLoading,
     users: data?.data
   }
 }

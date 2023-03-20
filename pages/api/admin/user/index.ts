@@ -38,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       const roleQuery = req.query.role ?? 'MEMBER'
-      const user = await User.find({ role: roleQuery }).select('-password')
+      const user = await User.find({ role: roleQuery }).populate('referrer').select('-password')
       res.status(200).json({ success: true, data: user })
       break
 

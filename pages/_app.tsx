@@ -1,7 +1,11 @@
 import { PageContainer } from '@/components/PageContainer'
 import { CacheProvider, EmotionCache } from '@emotion/react'
+import { GlobalStyles } from '@mui/material'
+import { grey } from '@mui/material/colors'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { SessionProvider } from 'next-auth/react'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
@@ -29,11 +33,18 @@ export default function MyApp(props: MyAppProps) {
         </Head>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <QueryClientProvider client={queryClient}>
-            <PageContainer>
-              <Component {...pageProps} />
-            </PageContainer>
-          </QueryClientProvider>
+          <GlobalStyles
+            styles={{
+              body: { backgroundColor: grey[100] }
+            }}
+          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <QueryClientProvider client={queryClient}>
+              <PageContainer>
+                <Component {...pageProps} />
+              </PageContainer>
+            </QueryClientProvider>
+          </LocalizationProvider>
         </ThemeProvider>
       </CacheProvider>
     </SessionProvider>

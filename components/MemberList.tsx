@@ -14,8 +14,11 @@ import {
 export interface Member {
   name: string
   email: string
-  start?: Date
-  end?: Date
+  referrer?: Member
+  activeDate?: {
+    start: Date
+    end: Date
+  }
   verify: any
   _id: string
 }
@@ -37,6 +40,7 @@ export const MemberList = ({ members }: MemberListProps) => {
             <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Verified Status</TableCell>
+            <TableCell>Referred By</TableCell>
             <TableCell>Start</TableCell>
             <TableCell>End</TableCell>
             <TableCell align='right'></TableCell>
@@ -55,8 +59,17 @@ export const MemberList = ({ members }: MemberListProps) => {
               <TableCell>
                 {member.verify?.verified ? 'Verified' : 'Unverified'}
               </TableCell>
-              <TableCell>{member.start?.toLocaleDateString()}</TableCell>
-              <TableCell>{member.end?.toLocaleDateString()}</TableCell>
+              <TableCell>
+                {member.referrer?.name ?? member.referrer?.email ?? '-'}
+              </TableCell>
+              <TableCell>
+                {member.activeDate?.start &&
+                  new Date(member.activeDate?.start)?.toLocaleDateString()}
+              </TableCell>
+              <TableCell>
+                {member.activeDate?.end &&
+                  new Date(member.activeDate?.end)?.toLocaleDateString()}
+              </TableCell>
               <TableCell align='right'>
                 <IconButton size='small' href={`/admin/members/${member._id}`}>
                   <Edit />

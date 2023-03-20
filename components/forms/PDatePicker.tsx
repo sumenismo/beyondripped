@@ -5,13 +5,16 @@ export interface PDatePickerProps {
   value: string
   onChange: (value: any, keyboardInputValue?: string | undefined) => void
   min?: string
+  name?: string
+  disabled?: boolean
 }
 
 export const PDatePicker = ({
   value,
   onChange,
   label = 'Date',
-  min
+  min,
+  disabled = false
 }: PDatePickerProps) => {
   return (
     <DesktopDatePicker
@@ -22,13 +25,17 @@ export const PDatePicker = ({
       // @ts-ignore
       onChange={onChange}
       minDate={min}
-      renderInput={(params: any) => (
+      sx={{
+        width: '100%'
+      }}
+      disabled={disabled}
+      textField={(params: any) => (
         <TextField
-          {...params}
           size='small'
           color='primary'
           error={false}
           fullWidth
+          {...params}
         />
       )}
     />
