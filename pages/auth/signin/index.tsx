@@ -1,3 +1,4 @@
+import Link from '@/components/Link'
 import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
@@ -91,10 +92,15 @@ export default function LoginForm() {
               </Typography>
             </Box>
           ) : null}
-          <Box pb={2}>
+
+          <Box pb={1}>
             <Button size='small' variant='contained' fullWidth type='submit'>
               Login
             </Button>
+          </Box>
+          <Box pb={2} pr={1} display='flex' justifyContent='space-between'>
+            <Link href='/auth/register'>Register</Link>
+            <Link href='/auth/forgot'>Forgot Password</Link>
           </Box>
         </form>
       </Paper>

@@ -11,6 +11,7 @@ export default function Register() {
         title='Member Registration'
         submitButtonLabel='Register'
         showCodeInput
+        showLogin
       />
     </Container>
   )

@@ -58,7 +58,7 @@ export const PasswordForm = () => {
 
   return (
     <Container maxWidth='sm'>
-      <Paper elevation={0}>
+      <Paper elevation={0} sx={{ p: 6 }}>
         {isSuccess ? (
           <Typography>
             Password set! You can login <Link href='/auth/signin'>here</Link>.

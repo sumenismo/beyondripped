@@ -14,6 +14,7 @@ import {
 export interface Member {
   name: string
   email: string
+  referralCode: string
   referrer?: Member
   activeDate?: {
     start: Date
@@ -39,6 +40,7 @@ export const MemberList = ({ members }: MemberListProps) => {
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
+            <TableCell>Referral Code</TableCell>
             <TableCell>Verified Status</TableCell>
             <TableCell>Referred By</TableCell>
             <TableCell>Start</TableCell>
@@ -56,6 +58,7 @@ export const MemberList = ({ members }: MemberListProps) => {
                 {member.name}
               </TableCell>
               <TableCell>{member.email}</TableCell>
+              <TableCell>{member.referralCode}</TableCell>
               <TableCell>
                 {member.verify?.verified ? 'Verified' : 'Unverified'}
               </TableCell>

@@ -1,5 +1,6 @@
 import { ControlledInput } from '@/components/forms/ControlledInput'
 import { PTextField } from '@/components/forms/PTextField'
+import Link from '@/components/Link'
 import { Role } from '@/pages'
 import { adminMemberFormValidationSchema } from '@/validation/adminMemberFormValidationSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -21,6 +22,7 @@ export interface MemberFormProps {
   title?: string
   submitButtonLabel?: string
   successMessage?: string
+  showLogin?: boolean
 }
 
 export const MemberForm = ({
@@ -29,7 +31,8 @@ export const MemberForm = ({
   showIsSuccess = false,
   title = '',
   submitButtonLabel = 'Submit',
-  successMessage = 'Success'
+  successMessage = 'Success',
+  showLogin = false
 }: MemberFormProps) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -121,7 +124,7 @@ export const MemberForm = ({
             />
           </Box>
         )}
-        <Box pb={2}>
+        <Box pb={0}>
           <Button
             disabled={isLoading}
             size='small'
@@ -134,12 +137,17 @@ export const MemberForm = ({
         </Box>
       </form>
       {showIsSuccess && isSuccess ? (
-        <Box>
+        <Box pt={2}>
           <Typography align='center' variant='body1' color='success.main'>
             {successMessage}
           </Typography>
         </Box>
       ) : null}
+      {showLogin && (
+        <Box pt={1} pr={1} display='flex' justifyContent='flex-end'>
+          <Link href='/auth/signin'>Login</Link>
+        </Box>
+      )}
     </Paper>
   )
 }
