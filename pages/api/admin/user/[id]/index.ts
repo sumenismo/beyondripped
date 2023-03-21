@@ -1,3 +1,5 @@
+import { getMonths } from '@/lib/utils'
+import Referral from '@/models/Referral'
 import User from '@/models/User'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
@@ -67,6 +69,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               }
             }
           ).select('-password')
+
+          if (put_user.referrer) {
+            const referrerUser: any = User.findOne({ _id: put_user.referrer })
+            if (
+              referrerUser.activeDate &&
+              new Date(referrerUser.activeDate.end) < new Date()
+            ) {
+              const monthRange = getMonths(new Date(start), new Date(end))
+
+              Promise.all(
+                monthRange.map(async month => {
+                  await Referral.create({
+                    member: put_user._id,
+                    referred: put_user.referrer,
+                    month
+                  })
+                })
+              )
+            }
+          }
+
           res.status(201).json({ success: true, data: put_user })
           break
 
