@@ -1,3 +1,4 @@
+import { SetAsPaidButton } from '@/components/SetAsPaidButton'
 import { Referral } from '@/hooks/useGetCommisions'
 import {
   Chip,
@@ -41,6 +42,9 @@ export const ReferralsList = ({ commissions }: ReferralsListProps) => {
                   label={com.isPaid ? 'Paid' : 'Unpaid'}
                   color={com.isPaid ? 'success' : 'default'}
                 />
+              </TableCell>
+              <TableCell width={140}>
+                <SetAsPaidButton com={com} />
               </TableCell>
             </TableRow>
           ))}

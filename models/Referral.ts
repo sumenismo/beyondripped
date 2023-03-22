@@ -1,19 +1,24 @@
+import User from '@/models/User'
 import mongoose from 'mongoose'
 
 const ReferralSchema = new mongoose.Schema({
   member: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'User'
+    ref: User
   },
   referred: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'User'
+    ref: User
   },
   date: {
     type: Date,
-    require: true
+    required: true
+  },
+  isPaid: {
+    type: Boolean,
+    required: false
   }
 })
 
