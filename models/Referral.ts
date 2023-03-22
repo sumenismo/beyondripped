@@ -11,7 +11,7 @@ const ReferralSchema = new mongoose.Schema({
     required: true,
     ref: 'User'
   },
-  month: {
+  date: {
     type: Date,
     require: true
   }
@@ -19,3 +19,5 @@ const ReferralSchema = new mongoose.Schema({
 
 export default mongoose.models.Referral ||
   mongoose.model('Referral', ReferralSchema)
+
+// echpacmn

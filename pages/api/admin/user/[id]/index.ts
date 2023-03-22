@@ -71,19 +71,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           ).select('-password')
 
           if (put_user.referrer) {
-            const referrerUser: any = User.findOne({ _id: put_user.referrer })
+            const referrerUser: any = await User.findOne({
+              _id: put_user.referrer
+            })
+
             if (
               referrerUser.activeDate &&
-              new Date(referrerUser.activeDate.end) < new Date()
+              new Date(referrerUser.activeDate.start) < new Date() &&
+              new Date(referrerUser.activeDate.end) > new Date()
             ) {
               const monthRange = getMonths(new Date(start), new Date(end))
 
               Promise.all(
-                monthRange.map(async month => {
+                monthRange.map(async date => {
                   await Referral.create({
-                    member: put_user._id,
-                    referred: put_user.referrer,
-                    month
+                    member: put_user.referrer,
+                    referred: put_user._id,
+                    date
                   })
                 })
               )

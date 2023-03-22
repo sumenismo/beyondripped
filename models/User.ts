@@ -50,7 +50,8 @@ const UserSchema = new mongoose.Schema({
   },
   referralCode: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   activeDate: {
     type: activeDate,

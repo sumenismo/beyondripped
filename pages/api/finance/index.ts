@@ -1,4 +1,4 @@
-import User from '@/models/User'
+import Referral from '@/models/Referral'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -16,7 +16,58 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (method) {
     case 'GET':
+      const date = req.query.date
+      const dateFilter =
+        date !== undefined ? new Date(date as string) : new Date()
+
       try {
+        const referrals = await Referral.aggregate([
+          {
+            $addFields: {
+              currentMonth: { $month: dateFilter },
+              currentYear: { $year: dateFilter }
+            }
+          },
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: [{ $month: '$date' }, '$currentMonth'] },
+                  { $eq: [{ $year: '$date' }, '$currentYear'] }
+                ]
+              }
+            }
+          }
+        ])
+
+        const populatedReferrals = await Referral.populate(referrals, [
+          { path: 'member', select: '-password' },
+          { path: 'referred', select: '-password' }
+        ])
+
+        res.status(200).json({ success: true, data: populatedReferrals })
+      } catch (error) {
+        console.log({ error })
+        res.status(500).json({ success: false, error })
+      }
+      break
+
+    case 'POST':
+      break
+
+    default:
+      break
+  }
+}
+
+/*
+          {
+            $match: {
+              member: new mongoose.Types.ObjectId('6418fdbd38a8d4219bb74ab1')
+            }
+          },
+
+try {
         const user = await User.aggregate([
           {
             $match: {
@@ -148,12 +199,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         console.log(error)
         res.status(500).json({ success: false, error })
       }
-      break
-
-    case 'POST':
-      break
-
-    default:
-      break
-  }
-}
+*/
