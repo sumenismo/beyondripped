@@ -1,17 +1,9 @@
-import { Member } from '@/components/MemberList'
+import { Referral } from '@/hooks/useGetCommisions'
 import { useQuery } from 'react-query'
 
-export interface Referral {
-  _id: string
-  member: Member
-  referred: Member
-  date: Date
-  isPaid?: boolean
-}
-
-export const useGetMemberCommissions = (id: string) => {
+export const useGetMemberCommissions = (code?: string) => {
   const getCommissions = async () => {
-    const url = `/api/finance/${id}`
+    const url = `/api/finance?code=${code}`
 
     const res = await fetch(url, {
       method: 'GET',
@@ -21,12 +13,19 @@ export const useGetMemberCommissions = (id: string) => {
     return res.json()
   }
 
-  const { data, isLoading } = useQuery(`commissions-${id}`, getCommissions, {
-    enabled: id !== undefined
+  const { data, isLoading } = useQuery(`commissions-${code}`, getCommissions, {
+    enabled: code !== undefined && code !== ''
   })
+
+  const total = data?.data.reduce(
+    (a: number, com: Referral) =>
+      a + com.fees.monthlyFee * (com.fees.commissionPercent / 100),
+    0
+  )
 
   return {
     data: data?.data,
+    total: total,
     isLoading
   }
 }

@@ -19,11 +19,13 @@ export const useGetCommissions = () => {
   const date = router.query.date
   const code = router.query.code
   const search = router.query.search
+  const page = router.query.page ?? 1
+  const perPage = router.query.perPage ?? 25
 
   const getCommissions = async () => {
     const url = `/api/finance?date=${date}${code ? `&code=${code}` : ''}${
       search ? `&search=${search}` : ''
-    }`
+    }&page=${page}&perPage=${perPage}`
 
     const res = await fetch(url, {
       method: 'GET',

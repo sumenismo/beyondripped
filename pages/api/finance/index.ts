@@ -21,6 +21,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const date = req.query.date
         const referralCode = req.query.code
         const search = req.query.search
+        const page = req.query.page
+        const perPage = req.query.perPage
 
         const dateFilter =
           date !== undefined ? new Date(date as string) : new Date()
@@ -89,26 +91,35 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           })
         }
 
-        pipeline.push({
-          $project: {
-            'member.name.password': 0
-          }
-        })
-
-        const referrals = await Referral.aggregate([
-          ...pipeline,
+        pipeline.push(
+          {
+            $project: {
+              'member.name.password': 0
+            }
+          },
           {
             $sort: {
               member: 1
             }
-          },
-          {
-            $facet: {
-              metadata: [{ $count: 'total' }, { $addFields: { page: 1 } }],
-              data: [{ $skip: 0 }, { $limit: 3 }]
-            }
           }
-        ])
+        )
+
+        if (page && perPage) {
+          pipeline.push({
+            $facet: {
+              metadata: [
+                { $count: 'total' },
+                { $addFields: { page, perPage } }
+              ],
+              data: [
+                { $skip: (Number(page) - 1) * Number(perPage) },
+                { $limit: Number(perPage) }
+              ]
+            }
+          })
+        }
+
+        const referrals = await Referral.aggregate(pipeline)
 
         res.status(200).json({ success: true, data: referrals })
       } catch (error) {

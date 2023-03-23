@@ -1,6 +1,7 @@
 import { FinanceFilter } from '@/components/FinanceFilters'
 import Protected from '@/components/Protected'
 import { ReferralsList } from '@/components/ReferralsList'
+import { TotalMonthCommissions } from '@/components/TotalMonthCommisions'
 import { useGetCommissions } from '@/hooks/useGetCommisions'
 import { Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
@@ -30,6 +31,9 @@ export default function FinanceHome() {
               )}
             </>
           )}
+        </Grid>
+        <Grid item xs={12}>
+          <TotalMonthCommissions />
         </Grid>
       </Grid>
     </Protected>
