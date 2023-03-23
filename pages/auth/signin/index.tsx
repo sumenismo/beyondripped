@@ -14,8 +14,6 @@ export default function LoginForm() {
   const { data } = useSession()
   const router = useRouter()
 
-  const callbackUrl = (router.query.callbackUrl as string) ?? '/'
-
   const error = router.query.error
   let isError = error !== undefined && error !== null
 
@@ -30,7 +28,7 @@ export default function LoginForm() {
     try {
       await signIn('credentials', {
         ...args,
-        callbackUrl
+        callbackUrl: '/'
       })
     } catch (error) {
       console.log(error)
