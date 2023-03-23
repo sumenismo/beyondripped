@@ -1,3 +1,4 @@
+import { CodeButton } from '@/components/CodeButton'
 import { SetAsPaidButton } from '@/components/SetAsPaidButton'
 import { Referral } from '@/hooks/useGetCommisions'
 import {
@@ -22,7 +23,8 @@ export const ReferralsList = ({ commissions }: ReferralsListProps) => {
       <Table sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
-            <TableCell>Referrer</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Email</TableCell>
             <TableCell>Code</TableCell>
             <TableCell>Referred</TableCell>
             <TableCell>Month</TableCell>
@@ -34,7 +36,10 @@ export const ReferralsList = ({ commissions }: ReferralsListProps) => {
           {commissions.map(com => (
             <TableRow key={com._id}>
               <TableCell>{com.member.name}</TableCell>
-              <TableCell>{com.member.referralCode}</TableCell>
+              <TableCell>{com.member.email}</TableCell>
+              <TableCell>
+                <CodeButton code={com.member.referralCode} />
+              </TableCell>
               <TableCell>{com.referred.name}</TableCell>
               <TableCell>{format(new Date(com.date), 'MMMM / yyyy')}</TableCell>
               <TableCell>

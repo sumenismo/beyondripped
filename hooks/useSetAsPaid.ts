@@ -5,6 +5,8 @@ export const useSetAsPaid = () => {
   const queryClient = useQueryClient()
   const router = useRouter()
   const date = router.query.date
+  const code = router.query.code
+  const search = router.query.search
 
   const setAsPaid = async (id: string) => {
     const url = `/api/finance/${id}`
@@ -17,7 +19,7 @@ export const useSetAsPaid = () => {
 
   return useMutation(setAsPaid, {
     onSuccess: () => {
-      queryClient.invalidateQueries(`commissions-${date}`)
+      queryClient.invalidateQueries(`commissions-${date}-${code}-${search}`)
     },
     onError: () => {}
   })

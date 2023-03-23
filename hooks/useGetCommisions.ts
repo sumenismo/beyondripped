@@ -13,9 +13,13 @@ export interface Referral {
 export const useGetCommissions = () => {
   const router = useRouter()
   const date = router.query.date
+  const code = router.query.code
+  const search = router.query.search
 
   const getCommissions = async () => {
-    const url = `/api/finance?date=${date}`
+    const url = `/api/finance?date=${date}${code ? `&code=${code}` : ''}${
+      search ? `&search=${search}` : ''
+    }`
 
     const res = await fetch(url, {
       method: 'GET',
@@ -25,9 +29,13 @@ export const useGetCommissions = () => {
     return res.json()
   }
 
-  const { data, isLoading } = useQuery(`commissions-${date}`, getCommissions, {
-    enabled: date !== undefined
-  })
+  const { data, isLoading } = useQuery(
+    `commissions-${date}-${code}-${search}`,
+    getCommissions,
+    {
+      enabled: date !== undefined
+    }
+  )
 
   return {
     data: data?.data,

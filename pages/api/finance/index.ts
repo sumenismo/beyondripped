@@ -1,4 +1,5 @@
 import Referral from '@/models/Referral'
+import User from '@/models/User'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -16,12 +17,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (method) {
     case 'GET':
-      const date = req.query.date
-      const dateFilter =
-        date !== undefined ? new Date(date as string) : new Date()
-
       try {
-        const referrals = await Referral.aggregate([
+        const date = req.query.date
+        const referralCode = req.query.code
+        const search = req.query.search
+
+        const dateFilter =
+          date !== undefined ? new Date(date as string) : new Date()
+
+        const pipeline: any = [
           {
             $addFields: {
               currentMonth: { $month: dateFilter },
@@ -38,7 +42,51 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               }
             }
           }
-        ])
+        ]
+
+        if (referralCode) {
+          const userWithCode = referralCode
+            ? await User.findOne({ referralCode })
+            : undefined
+
+          pipeline.push({
+            $match: {
+              member: userWithCode._id
+            }
+          })
+        }
+
+        if (search) {
+          pipeline.push(
+            {
+              $lookup: {
+                from: User.collection.name,
+                localField: 'member',
+                foreignField: '_id',
+                as: 'memberUser'
+              }
+            },
+            {
+              $unwind: '$memberUser'
+            },
+            {
+              $match: {
+                $or: [
+                  { 'memberUser.name': { $regex: search, $options: 'i' } },
+                  { 'memberUser.email': { $regex: search, $options: 'i' } }
+                ]
+              }
+            }
+          )
+        }
+
+        pipeline.push({
+          $project: {
+            'memberUser.name.password': 0
+          }
+        })
+
+        const referrals = await Referral.aggregate(pipeline)
 
         const populatedReferrals = await Referral.populate(referrals, [
           { path: 'member', select: '-password' },
