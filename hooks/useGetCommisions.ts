@@ -8,6 +8,10 @@ export interface Referral {
   referred: Member
   date: Date
   isPaid?: boolean
+  fees: {
+    monthlyFee: number
+    commissionPercent: number
+  }
 }
 
 export const useGetCommissions = () => {
@@ -38,7 +42,7 @@ export const useGetCommissions = () => {
   )
 
   return {
-    data: data?.data,
+    data: data?.data[0].data,
     isLoading
   }
 }

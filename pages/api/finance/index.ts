@@ -41,6 +41,28 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 ]
               }
             }
+          },
+          {
+            $lookup: {
+              from: User.collection.name,
+              localField: 'member',
+              foreignField: '_id',
+              as: 'member'
+            }
+          },
+          {
+            $unwind: '$member'
+          },
+          {
+            $lookup: {
+              from: User.collection.name,
+              localField: 'referred',
+              foreignField: '_id',
+              as: 'referred'
+            }
+          },
+          {
+            $unwind: '$referred'
           }
         ]
 
@@ -51,49 +73,44 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
           pipeline.push({
             $match: {
-              member: userWithCode._id
+              'member._id': userWithCode._id
             }
           })
         }
 
         if (search) {
-          pipeline.push(
-            {
-              $lookup: {
-                from: User.collection.name,
-                localField: 'member',
-                foreignField: '_id',
-                as: 'memberUser'
-              }
-            },
-            {
-              $unwind: '$memberUser'
-            },
-            {
-              $match: {
-                $or: [
-                  { 'memberUser.name': { $regex: search, $options: 'i' } },
-                  { 'memberUser.email': { $regex: search, $options: 'i' } }
-                ]
-              }
+          pipeline.push({
+            $match: {
+              $or: [
+                { 'member.name': { $regex: search, $options: 'i' } },
+                { 'member.email': { $regex: search, $options: 'i' } }
+              ]
             }
-          )
+          })
         }
 
         pipeline.push({
           $project: {
-            'memberUser.name.password': 0
+            'member.name.password': 0
           }
         })
 
-        const referrals = await Referral.aggregate(pipeline)
-
-        const populatedReferrals = await Referral.populate(referrals, [
-          { path: 'member', select: '-password' },
-          { path: 'referred', select: '-password' }
+        const referrals = await Referral.aggregate([
+          ...pipeline,
+          {
+            $sort: {
+              member: 1
+            }
+          },
+          {
+            $facet: {
+              metadata: [{ $count: 'total' }, { $addFields: { page: 1 } }],
+              data: [{ $skip: 0 }, { $limit: 3 }]
+            }
+          }
         ])
 
-        res.status(200).json({ success: true, data: populatedReferrals })
+        res.status(200).json({ success: true, data: referrals })
       } catch (error) {
         console.log({ error })
         res.status(500).json({ success: false, error })

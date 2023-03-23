@@ -45,7 +45,8 @@ export const MemberForm = ({
         email: '',
         name: '',
         referralCode: ''
-      }
+      },
+      mode: 'onBlur'
     })
 
   const onSubmit = async (args: MemberFormValues) => {

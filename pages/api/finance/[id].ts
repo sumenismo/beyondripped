@@ -15,6 +15,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   switch (method) {
+    case 'GET':
+      try {
+        const id = req.query.id
+        const referrals = await Referral.find({ member: id })
+        res.status(201).json({ success: true, data: referrals })
+      } catch (error) {
+        console.log(error)
+        res.status(500).json({ success: false, error })
+      }
+      break
     case 'PUT':
       try {
         const id = req.query.id
