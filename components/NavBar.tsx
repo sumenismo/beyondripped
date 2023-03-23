@@ -37,6 +37,13 @@ export const NavBar = ({ role }: NavBarProps) => {
                 >
                   Finance
                 </Link>
+                <Link
+                  sx={{ textDecoration: 'none', mr: 2 }}
+                  color='#0c1413'
+                  href='/admin/settings'
+                >
+                  Settings
+                </Link>
               </>
             )}
           </Box>

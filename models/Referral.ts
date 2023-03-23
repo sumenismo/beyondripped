@@ -1,6 +1,17 @@
 import User from '@/models/User'
 import mongoose from 'mongoose'
 
+const FeesSchema = new mongoose.Schema({
+  monthlyFee: {
+    type: Number,
+    required: true
+  },
+  commissionPercent: {
+    type: Number,
+    required: true
+  }
+})
+
 const ReferralSchema = new mongoose.Schema({
   member: {
     type: mongoose.Schema.Types.ObjectId,
@@ -19,6 +30,10 @@ const ReferralSchema = new mongoose.Schema({
   isPaid: {
     type: Boolean,
     required: false
+  },
+  fees: {
+    type: FeesSchema,
+    required: true
   }
 })
 
