@@ -49,7 +49,7 @@ export const SettingsForm = ({ defaultValues }: SettingsFormProps) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={6}>
           <ControlledInput
             name='monthlyFee'
             placeholder='Monthly Fee'
@@ -61,7 +61,7 @@ export const SettingsForm = ({ defaultValues }: SettingsFormProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={6}>
           <ControlledInput
             name='commissionPercent'
             placeholder='Commission Percent'

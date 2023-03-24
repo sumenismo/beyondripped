@@ -1,3 +1,4 @@
+import { ChangePasswordForm } from '@/components/ChangePasswordForm'
 import Protected from '@/components/Protected'
 import { SettingsForm } from '@/components/SettingsForm'
 import { useGetSettings } from '@/hooks/useGetSettings'
@@ -8,20 +9,29 @@ export default function Settings() {
 
   return (
     <Protected>
-      <Paper sx={{ p: 4 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant='h6'>Settings</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            {isLoading ? (
-              <Typography variant='body1'>Loading...</Typography>
-            ) : (
-              <SettingsForm defaultValues={data} />
-            )}
-          </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Paper sx={{ p: 4 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Typography variant='h6'>App Settings</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                {isLoading ? (
+                  <Typography variant='body1'>Loading...</Typography>
+                ) : (
+                  <SettingsForm defaultValues={data} />
+                )}
+              </Grid>
+            </Grid>
+          </Paper>
         </Grid>
-      </Paper>
+        <Grid item xs={12} md={6}>
+          <Paper sx={{ p: 4 }}>
+            <ChangePasswordForm />
+          </Paper>
+        </Grid>
+      </Grid>
     </Protected>
   )
 }
