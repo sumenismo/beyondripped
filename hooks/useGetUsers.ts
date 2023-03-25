@@ -16,6 +16,6 @@ export const useGetUsers = (role: Role) => {
 
   return {
     isLoading,
-    users: data?.data
+    users: data?.data.user
   }
 }

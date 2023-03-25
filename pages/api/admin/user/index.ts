@@ -37,9 +37,43 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return
       }
 
+      const search = req.query.search as string
       const roleQuery = req.query.role ?? 'MEMBER'
-      const user = await User.find({ role: roleQuery }).populate('referrer').select('-password')
-      res.status(200).json({ success: true, data: user })
+
+      const searchQuery =
+        search !== undefined && search.trim() !== ''
+          ? {
+              name: new RegExp(search, 'i')
+            }
+          : null
+
+      const query = Object.assign({ role: roleQuery }, searchQuery)
+
+      const perPage = req.query.perPage ? Number(req.query.perPage) : 10
+      const page = req.query.page ? Number(req.query.page) : 1
+
+      const user = await User.find(query, '-password', {
+        collation: { locale: 'en' },
+        limit: perPage,
+        skip: (page - 1) * perPage
+      })
+        .populate('referrer')
+        .exec()
+
+      const count = await User.find(query, {
+        collation: { locale: 'en' }
+      }).countDocuments()
+
+      const data = {
+        user,
+        meta: {
+          page,
+          perPage,
+          count
+        }
+      }
+
+      res.status(200).json({ success: true, data })
       break
 
     case 'POST':
