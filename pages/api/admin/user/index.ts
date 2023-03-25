@@ -57,6 +57,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         limit: perPage,
         skip: (page - 1) * perPage
       })
+        .sort([['_id', -1]])
         .populate('referrer')
         .exec()
 

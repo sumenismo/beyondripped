@@ -6,7 +6,6 @@ import { format, isFuture } from 'date-fns'
 
 export default function MemberHome() {
   const { data, isLoading } = useGetProfile()
-  console.log({ data })
 
   if (isLoading) {
     return (
