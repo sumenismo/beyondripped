@@ -64,6 +64,31 @@ export const NavBar = ({ role }: NavBarProps) => {
                 </Link>
               </>
             )}
+            {role === 'MEMBER' && (
+              <>
+                <Link
+                  sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
+                  color='#0c1413'
+                  href='/member'
+                >
+                  Profile
+                </Link>
+                <Link
+                  sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
+                  color='#0c1413'
+                  href='/member/referrals'
+                >
+                  Referrals
+                </Link>
+                <Link
+                  sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
+                  color='#0c1413'
+                  href='/member/settings'
+                >
+                  Settings
+                </Link>
+              </>
+            )}
           </Box>
           <Button sx={{ color: '#0c1413' }} onClick={() => signOut()}>
             Logout
