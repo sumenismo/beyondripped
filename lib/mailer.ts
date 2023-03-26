@@ -13,7 +13,7 @@ export const sendMail = async (message: any) => {
     })
   )
 
-  mailer.sendMail(message, (error: any, info: any) => {
+  await mailer.sendMail(message, (error: any, info: any) => {
     if (error) {
       return console.log(error)
     }
