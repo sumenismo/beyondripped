@@ -1,7 +1,6 @@
 import { Role } from '@/pages'
 import { Edit } from '@mui/icons-material'
 import {
-  Chip,
   IconButton,
   Paper,
   Table,
@@ -51,7 +50,6 @@ export const MemberList = ({ members, role = 'MEMBER' }: MemberListProps) => {
                 <TableCell>End</TableCell>
               </>
             )}
-            <TableCell>Status</TableCell>
             <TableCell align='right'></TableCell>
           </TableRow>
         </TableHead>
@@ -82,13 +80,6 @@ export const MemberList = ({ members, role = 'MEMBER' }: MemberListProps) => {
                   </TableCell>
                 </>
               )}
-
-              <TableCell>
-                <Chip
-                  label={member.verify?.verified ? 'Verified' : 'Unverified'}
-                  color={member.verify?.verified ? 'success' : 'warning'}
-                />
-              </TableCell>
               <TableCell align='right'>
                 <IconButton
                   size='small'
