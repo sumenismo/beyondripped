@@ -47,7 +47,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
           : null
 
-      const query = Object.assign({ role: roleQuery }, searchQuery)
+      const query = Object.assign(
+        { role: roleQuery, isArchived: { $ne: true } },
+        searchQuery
+      )
 
       const perPage = req.query.perPage ? Number(req.query.perPage) : 10
       const page = req.query.page ? Number(req.query.page) : 1

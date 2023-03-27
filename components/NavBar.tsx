@@ -26,7 +26,7 @@ export const NavBar = ({ role }: NavBarProps) => {
                 <Link
                   sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
                   color='#0c1413'
-                  href='/admin/members'
+                  href='/admin/member'
                 >
                   Members
                 </Link>
@@ -36,6 +36,13 @@ export const NavBar = ({ role }: NavBarProps) => {
                   href='/admin/finance'
                 >
                   Finance
+                </Link>
+                <Link
+                  sx={{ textDecoration: 'none', mr: 2 }}
+                  color='#0c1413'
+                  href='/admin/admin'
+                >
+                  Admin
                 </Link>
                 <Link
                   sx={{ textDecoration: 'none', mr: 2 }}

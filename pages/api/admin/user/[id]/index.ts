@@ -108,6 +108,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           res.status(201).json({ success: true, data: put_user })
           break
 
+        case 'ARCHIVE':
+          try {
+            const archive_user = await User.findOneAndUpdate(
+              { _id: put_userId },
+              {
+                isArchived: true
+              }
+            ).select('-password')
+
+            res.status(201).json({ success: true, data: archive_user })
+          } catch (error) {
+            res.status(500).json({ success: false, error })
+          }
+
+          break
+
         default:
           res.status(400).json({ success: false, error: 'Invalid data' })
           break

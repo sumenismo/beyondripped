@@ -60,6 +60,10 @@ const UserSchema = new mongoose.Schema({
   verify: {
     type: verify,
     required: true
+  },
+  isArchived: {
+    type: Boolean,
+    required: false
   }
 })
 

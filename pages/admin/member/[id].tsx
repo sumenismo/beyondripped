@@ -1,4 +1,5 @@
 import { ActiveDateForm } from '@/components/ActiveDateForm'
+import { LabelledValue } from '@/components/LabelledValue'
 import Protected from '@/components/Protected'
 import { useGetUser } from '@/hooks/useGetUser'
 import CloseIcon from '@mui/icons-material/Close'
@@ -12,7 +13,7 @@ import {
   Paper,
   Typography
 } from '@mui/material'
-import { isFuture } from 'date-fns'
+import { format, isFuture } from 'date-fns'
 import { useState } from 'react'
 
 export default function Member() {
@@ -57,17 +58,32 @@ export default function Member() {
               </Box>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant='h5'>{data.name ?? data.email}</Typography>
-              {data.referrer && (
-                <Typography variant='body1'>
-                  Referrer:{' '}
-                  <Typography component='span' variant='subtitle1'>
-                    {data.referrer?.name ??
-                      data.referrer?.email ??
-                      data.referrer?.code}
-                  </Typography>
-                </Typography>
-              )}
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={4}>
+                  <LabelledValue label='Name' value={data.name} />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <LabelledValue label='Email' value={data.email} />
+                </Grid>
+                {data.role === 'MEMBER' && (
+                  <>
+                    <Grid item xs={12} md={4}>
+                      <LabelledValue label='Code' value={data.referralCode} />
+                    </Grid>
+                    {data.activeDate && (
+                      <Grid item xs={12} md={4}>
+                        <LabelledValue
+                          label='Active Until'
+                          value={format(
+                            new Date(data.activeDate?.end as any),
+                            'MM / dd / yyyy'
+                          )}
+                        />
+                      </Grid>
+                    )}
+                  </>
+                )}
+              </Grid>
             </Grid>
           </Grid>
         </Paper>

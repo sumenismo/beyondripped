@@ -15,10 +15,10 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 
-export default function Finance() {
+export default function Admin() {
   const [archiveForm, setArchiveFormOpen] = useState(false)
   const { data, isLoading } = useGetUser()
-  const { mutate: archive, isLoading: isArchiving } = useArchiveUser('FINANCE')
+  const { mutate: archive, isLoading: isArchiving } = useArchiveUser('ADMIN')
 
   const handleArchive = () => {
     archive(undefined, {

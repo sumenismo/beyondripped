@@ -1,0 +1,63 @@
+import { MemberForm } from '@/components/MemberForm'
+import { MemberList } from '@/components/MemberList'
+import Protected from '@/components/Protected'
+import { useGetUsers } from '@/hooks/useGetUsers'
+import CloseIcon from '@mui/icons-material/Close'
+import { Button, Dialog, Grid, IconButton, Typography } from '@mui/material'
+import { Box } from '@mui/system'
+import { useState } from 'react'
+
+export default function Admin() {
+  const [openMemberForm, setOpenMemberForm] = useState(false)
+  const { users, isLoading } = useGetUsers('ADMIN')
+
+  return (
+    <Protected>
+      <Grid container spacing={2}>
+        <Grid container justifyContent='space-between' item xs={12} spacing={2}>
+          <Grid item>
+            <Typography variant='h6'>Admin</Typography>
+          </Grid>
+          <Grid item>
+            <Button variant='contained' onClick={() => setOpenMemberForm(true)}>
+              Add New Admin
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            {isLoading ? (
+              <Typography>Loading...</Typography>
+            ) : (
+              <MemberList members={users} role='ADMIN' />
+            )}
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <Dialog
+        open={openMemberForm}
+        onClose={() => setOpenMemberForm(false)}
+        fullWidth
+        maxWidth='sm'
+      >
+        <Box
+          sx={{
+            position: 'relative'
+          }}
+        >
+          <IconButton
+            sx={{ position: 'absolute', top: 10, right: 10 }}
+            onClick={() => setOpenMemberForm(false)}
+          >
+            <CloseIcon />
+          </IconButton>
+          <MemberForm
+            role='ADMIN'
+            showIsSuccess
+            title='Add New Admin'
+            submitButtonLabel='Add New Admin'
+          />
+        </Box>
+      </Dialog>
+    </Protected>
+  )
+}

@@ -92,9 +92,7 @@ export const MemberList = ({ members, role = 'MEMBER' }: MemberListProps) => {
               <TableCell align='right'>
                 <IconButton
                   size='small'
-                  href={`/admin/${role === 'MEMBER' ? 'members' : 'finance'}/${
-                    member._id
-                  }`}
+                  href={`/admin/${role.toLocaleLowerCase()}/${member._id}`}
                 >
                   <Edit />
                 </IconButton>
