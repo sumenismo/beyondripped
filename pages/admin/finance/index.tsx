@@ -1,6 +1,7 @@
 import { MemberForm } from '@/components/MemberForm'
 import { MemberList } from '@/components/MemberList'
 import Protected from '@/components/Protected'
+import { SearchFilter } from '@/components/SearchFilter'
 import { useGetUsers } from '@/hooks/useGetUsers'
 import CloseIcon from '@mui/icons-material/Close'
 import { Button, Dialog, Grid, IconButton, Typography } from '@mui/material'
@@ -23,13 +24,16 @@ export default function Finance() {
               Add New Finance
             </Button>
           </Grid>
-          <Grid item xs={12}>
-            {isLoading ? (
-              <Typography>Loading...</Typography>
-            ) : (
-              <MemberList members={users} role='FINANCE' />
-            )}
-          </Grid>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <SearchFilter />
+        </Grid>
+        <Grid item xs={12}>
+          {isLoading ? (
+            <Typography>Loading...</Typography>
+          ) : (
+            <MemberList members={users} role='FINANCE' />
+          )}
         </Grid>
       </Grid>
 
