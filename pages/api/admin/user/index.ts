@@ -43,7 +43,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const searchQuery =
         search !== undefined && search.trim() !== ''
           ? {
-              name: new RegExp(search, 'i')
+              $or: [
+                { name: new RegExp(search, 'i') },
+                { email: new RegExp(search, 'i') }
+              ]
             }
           : null
 
@@ -52,7 +55,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         searchQuery
       )
 
-      const perPage = req.query.perPage ? Number(req.query.perPage) : 10
+      const perPage = req.query.perPage ? Number(req.query.perPage) : 25
       const page = req.query.page ? Number(req.query.page) : 1
 
       const user = await User.find(query, '-password', {
