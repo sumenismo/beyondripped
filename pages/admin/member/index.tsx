@@ -1,3 +1,4 @@
+import { BRPagination } from '@/components/BRPagination'
 import { MemberForm } from '@/components/MemberForm'
 import { MemberList } from '@/components/MemberList'
 import Protected from '@/components/Protected'
@@ -11,7 +12,7 @@ import { useState } from 'react'
 export default function Members() {
   const [openMemberForm, setOpenMemberForm] = useState(false)
 
-  const { users, isLoading } = useGetUsers('MEMBER')
+  const { users, isLoading, meta } = useGetUsers('MEMBER')
 
   return (
     <Protected>
@@ -35,6 +36,11 @@ export default function Members() {
           ) : (
             <MemberList members={users} />
           )}
+        </Grid>
+        <Grid item xs={12}>
+          {meta && meta.count ? (
+            <BRPagination count={meta.count} dataPerPage={meta.perPage} />
+          ) : null}
         </Grid>
       </Grid>
 
