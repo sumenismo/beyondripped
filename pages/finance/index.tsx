@@ -1,3 +1,4 @@
+import { BRPagination } from '@/components/BRPagination'
 import { FinanceFilter } from '@/components/FinanceFilters'
 import Protected from '@/components/Protected'
 import { ReferralsList } from '@/components/ReferralsList'
@@ -7,7 +8,7 @@ import { Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 
 export default function FinanceHome() {
-  const { data, isLoading } = useGetCommissions()
+  const { data, isLoading, meta } = useGetCommissions()
   const router = useRouter()
 
   return (
@@ -16,8 +17,13 @@ export default function FinanceHome() {
         <Grid item xs={12}>
           <Typography variant='h6'>Commissions</Typography>
         </Grid>
-        <Grid item xs={12}>
-          <FinanceFilter />
+        <Grid item xs={12} container spacing={2}>
+          <Grid item xs={10}>
+            <FinanceFilter />
+          </Grid>
+          <Grid item xs={2}>
+            <TotalMonthCommissions />
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           {isLoading || router.query.date === undefined ? (
@@ -32,8 +38,11 @@ export default function FinanceHome() {
             </>
           )}
         </Grid>
+
         <Grid item xs={12}>
-          <TotalMonthCommissions />
+          {meta && meta.total ? (
+            <BRPagination count={meta.total} dataPerPage={meta.perPage} />
+          ) : null}
         </Grid>
       </Grid>
     </Protected>

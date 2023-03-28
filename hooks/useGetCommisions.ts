@@ -36,7 +36,7 @@ export const useGetCommissions = () => {
   }
 
   const { data, isLoading } = useQuery(
-    `commissions-${date}-${code}-${search}`,
+    `commissions-${date}-${code}-${search}-${page}-${perPage}`,
     getCommissions,
     {
       enabled: date !== undefined
@@ -45,6 +45,7 @@ export const useGetCommissions = () => {
 
   return {
     data: data?.data[0].data,
-    isLoading
+    isLoading,
+    meta: data?.data[0].metadata[0]
   }
 }
