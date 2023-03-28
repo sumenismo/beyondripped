@@ -34,6 +34,7 @@ export const useGetReferrals = () => {
   return {
     data: data?.data[0].data,
     isLoading,
-    total
+    total,
+    meta: data?.data[0].metadata[0]
   }
 }
