@@ -2,7 +2,7 @@ import Link from '@/components/Link'
 import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 export interface LoginFormValues {
@@ -24,8 +24,10 @@ export default function LoginForm() {
     }
   })
 
+  const [isLoading, setIsLoading] = useState(false)
   const onSubmit = async (args: LoginFormValues) => {
     try {
+      setIsLoading(true)
       await signIn('credentials', {
         ...args,
         callbackUrl: '/'
@@ -33,6 +35,8 @@ export default function LoginForm() {
     } catch (error) {
       console.log(error)
       isError = true
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -92,7 +96,13 @@ export default function LoginForm() {
           ) : null}
 
           <Box pb={1}>
-            <Button size='small' variant='contained' fullWidth type='submit'>
+            <Button
+              size='small'
+              variant='contained'
+              fullWidth
+              type='submit'
+              disabled={isLoading}
+            >
               Login
             </Button>
           </Box>
