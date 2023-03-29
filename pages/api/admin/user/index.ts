@@ -111,7 +111,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           to: user.email,
           subject: 'Verify your registration',
           text: 'Please verify your registration.',
-          html: `<p>Your email has been registered to Beyong Ripped as ${req.body.role}, verify your email by clicking this <a href='${process.env.NEXTAUTH_URL}/verify/${user.verify.code}'>link.</a></p>`
+          html: `<p>Your email has been registered to Beyond Ripped as ${req.body.role}, verify your email by clicking this <a href='${process.env.NEXTAUTH_URL}/verify/${user.verify.code}'>link.</a></p>`
         })
 
         res.status(201).json({ success: true, data: user })
