@@ -1,6 +1,7 @@
 import Link from '@/components/Link'
 import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import { signIn, useSession } from 'next-auth/react'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -53,10 +54,15 @@ export default function LoginForm() {
         elevation={0}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Box pb={2}>
-            <Typography align='center' variant='h6'>
-              Beyond Ripped
-            </Typography>
+          <Box pb={2} width='100%' height={120} sx={{ position: 'relative' }}>
+            <Image
+              src='/BeyondRippedLogo.png'
+              alt='Beyond Ripped'
+              fill
+              style={{
+                objectFit: 'contain'
+              }}
+            />
           </Box>
           <Box pb={2}>
             <Controller
