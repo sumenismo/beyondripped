@@ -5,6 +5,7 @@ import { Role } from '@/pages'
 import { adminMemberFormValidationSchema } from '@/validation/adminMemberFormValidationSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Button, Paper, Typography } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
@@ -38,6 +39,11 @@ export const MemberForm = ({
   const [isLoading, setIsLoading] = useState(false)
   const queryClient = useQueryClient()
 
+  const router = useRouter()
+  const search = router.query.search
+  const page = router.query.page ?? 1
+  const perPage = router.query.perPage ?? 25
+
   const { control, handleSubmit, setError, clearErrors, reset } =
     useForm<MemberFormValues>({
       resolver: yupResolver(adminMemberFormValidationSchema),
@@ -67,7 +73,9 @@ export const MemberForm = ({
         clearErrors()
         setIsSuccess(true)
         reset({ email: '', name: '', referralCode: '' })
-        await queryClient.invalidateQueries('users-MEMBER')
+        queryClient.invalidateQueries(
+          `users-${role}-${search}-${page}-${perPage}`
+        )
       }
     } catch (error: any) {
       console.log(error)
