@@ -50,7 +50,7 @@ export const authOptions = {
           user = await res.json()
         }
 
-        if (user) {
+        if (user && !user.isArchived) {
           return user
         }
 
