@@ -1,6 +1,7 @@
 import { Role } from '@/pages'
 import { Edit } from '@mui/icons-material'
 import {
+  Chip,
   IconButton,
   Paper,
   Table,
@@ -35,6 +36,17 @@ export const MemberList = ({ members, role = 'MEMBER' }: MemberListProps) => {
     return <Typography variant='body1'>No data found</Typography>
   }
 
+  const getActiveStatus = (member: Member) => {
+    if (member.activeDate?.start && member.activeDate?.end) {
+      const today = new Date()
+      return (
+        today > new Date(member.activeDate?.start) &&
+        today < new Date(member.activeDate?.end)
+      )
+    }
+    return false
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
@@ -48,6 +60,7 @@ export const MemberList = ({ members, role = 'MEMBER' }: MemberListProps) => {
                 <TableCell>Referred By</TableCell>
                 <TableCell>Start</TableCell>
                 <TableCell>End</TableCell>
+                <TableCell>Status</TableCell>
               </>
             )}
             <TableCell align='right'></TableCell>
@@ -77,6 +90,12 @@ export const MemberList = ({ members, role = 'MEMBER' }: MemberListProps) => {
                   <TableCell>
                     {member.activeDate?.end &&
                       new Date(member.activeDate?.end)?.toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      label={getActiveStatus(member) ? 'Active' : 'Inactive'}
+                      color={getActiveStatus(member) ? 'success' : 'default'}
+                    />
                   </TableCell>
                 </>
               )}
