@@ -12,6 +12,7 @@ export default function Register() {
         submitButtonLabel='Register'
         showCodeInput
         showLogin
+        showLogo
       />
     </Container>
   )

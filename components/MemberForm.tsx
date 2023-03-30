@@ -5,6 +5,7 @@ import { Role } from '@/pages'
 import { adminMemberFormValidationSchema } from '@/validation/adminMemberFormValidationSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Button, Paper, Typography } from '@mui/material'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -24,6 +25,7 @@ export interface MemberFormProps {
   submitButtonLabel?: string
   successMessage?: string
   showLogin?: boolean
+  showLogo?: boolean
 }
 
 export const MemberForm = ({
@@ -33,7 +35,8 @@ export const MemberForm = ({
   title = '',
   submitButtonLabel = 'Submit',
   successMessage = 'Success',
-  showLogin = false
+  showLogin = false,
+  showLogo = false
 }: MemberFormProps) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -96,6 +99,18 @@ export const MemberForm = ({
       elevation={0}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
+        {showLogo && (
+          <Box pb={2} width='100%' height={120} sx={{ position: 'relative' }}>
+            <Image
+              src='/BeyondRippedLogo.png'
+              alt='Beyond Ripped'
+              fill
+              style={{
+                objectFit: 'contain'
+              }}
+            />
+          </Box>
+        )}
         <Box pb={2}>
           <Typography align='center' variant='h6' textTransform='capitalize'>
             {title}
