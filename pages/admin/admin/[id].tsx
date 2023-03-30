@@ -13,11 +13,13 @@ import {
   Paper,
   Typography
 } from '@mui/material'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 
 export default function Admin() {
   const [archiveForm, setArchiveFormOpen] = useState(false)
   const { data, isLoading } = useGetUser()
+  const { data: userData } = useSession()
   const { mutate: archive, isLoading: isArchiving } = useArchiveUser('ADMIN')
 
   const handleArchive = () => {
@@ -27,6 +29,8 @@ export default function Admin() {
       }
     })
   }
+
+  const isLoggedInUser = (userData as any)?.user?.email === data?.email
 
   if (isLoading) {
     return <Typography>Loading...</Typography>
@@ -63,7 +67,7 @@ export default function Admin() {
                       variant='outlined'
                       color='error'
                       onClick={() => setArchiveFormOpen(true)}
-                      disabled={data.isArchived}
+                      disabled={data.isArchived || isLoggedInUser}
                     >
                       {data.isArchived ? 'Archived' : 'Archive'}
                     </Button>
