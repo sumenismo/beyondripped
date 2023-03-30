@@ -66,8 +66,8 @@ export const sendMail = async (message: any) => {
     */
   const mailer = nodemailer.createTransport(
     smtpTransport({
-      host: 'beyondripped.ph',
-      port: 465,
+      host: 'smtpout.secureserver.net',
+      port: 587,
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD
