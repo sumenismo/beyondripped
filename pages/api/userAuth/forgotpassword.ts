@@ -26,7 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         ).select('-password')
 
         sendMail({
-          from: 'no-reply@beyondripped.com',
+          from: 'admin@beyondripped.ph',
           to: body.email,
           subject: 'Password Reset',
           text: 'Password reset',

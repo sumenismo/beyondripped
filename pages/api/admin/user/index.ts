@@ -116,7 +116,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         })
 
         sendMail({
-          from: 'no-reply@beyondripped.com',
+          from: 'admin@beyondripped.ph',
           to: user.email,
           subject: 'Verify your registration',
           text: 'Please verify your registration.',
