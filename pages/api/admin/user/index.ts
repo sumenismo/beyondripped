@@ -94,7 +94,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         if (req.body.code && req.body.code !== '') {
           referrer = await User.findOne({ referralCode: req.body.code })
+          if (!referrer) {
+            res
+              .status(400)
+              .json({ success: false, error: 'Invalid referral code' })
+            return
+          }
+
+          console.log({ referrer })
         }
+
         const user = await User.create({
           ...req.body,
           referralCode: generateCode(),

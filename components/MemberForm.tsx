@@ -64,6 +64,13 @@ export const MemberForm = ({
         body: JSON.stringify({ ...args, role, code: args.referralCode }),
         headers: { 'Content-Type': 'application/json' }
       })
+      const data = await res.json()
+      console.log({ data })
+      if (res.status === 400 && data.error === 'Invalid referral code') {
+        setError('referralCode', {
+          message: 'Invalid referral code'
+        })
+      }
       if (res.status === 409) {
         setError('email', {
           message: 'Email already used'
