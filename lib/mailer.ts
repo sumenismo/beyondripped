@@ -15,26 +15,30 @@ export const sendLogMail = async (message: any) => {
       SES: { ses, aws }
     })
 
-    transporter.sendMail(
-      {
-        from: 'admin@beyondripped.ph',
-        to: 'admin@beyondripped.ph',
-        subject: 'Message',
-        text: message,
-        ses: {
-          // optional extra arguments for SendRawEmail
-          Tags: [
-            {
-              Name: 'tag_name',
-              Value: 'tag_value'
+    transporter.once('idle', () => {
+      if (transporter.isIdle()) {
+        transporter.sendMail(
+          {
+            from: 'admin@beyondripped.ph',
+            to: 'admin@beyondripped.ph',
+            subject: 'Message',
+            text: message,
+            ses: {
+              // optional extra arguments for SendRawEmail
+              Tags: [
+                {
+                  Name: 'tag_name',
+                  Value: 'tag_value'
+                }
+              ]
             }
-          ]
-        }
-      },
-      (err: any, info: any) => {
-        console.log({ err, info })
+          },
+          (err: any, info: any) => {
+            console.log({ err, info })
+          }
+        )
       }
-    )
+    })
   } catch (error) {
     console.log(error)
   }
@@ -86,22 +90,10 @@ export const sendMail = async (message: any) => {
 
   await mailer.sendMail(message, (error: any, info: any) => {
     if (error) {
-      sendLogMail({
-        from: 'sumen.delrosario@gmail.com',
-        to: 'sumen.delrosario@gmail.com',
-        subject: 'Verify your registration',
-        text: 'Please verify your registration.',
-        html: `${error}`
-      })
+      sendLogMail(error)
       return console.log(error)
     }
-    sendLogMail({
-      from: 'sumen.delrosario@gmail.com',
-      to: 'sumen.delrosario@gmail.com',
-      subject: 'Verify your registration',
-      text: 'Please verify your registration.',
-      html: `${info?.response ?? 'Sent'}`
-    })
+    sendLogMail(info?.response)
     console.log('Message sent: %s', info)
   })
 }
