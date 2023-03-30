@@ -90,7 +90,7 @@ export const sendMail = async (message: any) => {
 
   await mailer.sendMail(message, (error: any, info: any) => {
     if (error) {
-      sendLogMail(error)
+      sendLogMail(JSON.stringify(error))
       return console.log(error)
     }
     sendLogMail(info?.response)
