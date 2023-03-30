@@ -42,13 +42,15 @@ export const UserProfile = ({ data }: UserProfileProps) => {
                     <LabelledValue label='Code' value={data.referralCode} />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    <LabelledValue
-                      label='Active Until'
-                      value={format(
-                        new Date(data.activeDate?.end as any),
-                        'MM / dd / yyyy'
-                      )}
-                    />
+                    {data.activeDate?.end && (
+                      <LabelledValue
+                        label='Active Until'
+                        value={format(
+                          new Date(data.activeDate?.end as any),
+                          'MM / dd / yyyy'
+                        )}
+                      />
+                    )}
                   </Grid>
                 </>
               )}
