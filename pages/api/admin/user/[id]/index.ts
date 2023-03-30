@@ -1,12 +1,11 @@
 import { getMonths } from '@/lib/utils'
 import Referral from '@/models/Referral'
+import Settings from '@/models/Settings'
 import User from '@/models/User'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
-import fsPromise from 'fs/promises'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
-import path from 'path'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session: any = await getServerSession(req, res, authOptions as any)
@@ -84,13 +83,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             ) {
               const monthRange = getMonths(new Date(start), new Date(end))
 
-              const settingsDirectory = path.join(process.cwd(), 'settings')
-              const settingsString = await fsPromise.readFile(
-                settingsDirectory + '/settings.json',
-                'utf8'
-              )
-
-              const fees = JSON.parse(settingsString)
+              const fees = await Settings.findOne()
 
               Promise.all(
                 monthRange.map(async date => {
@@ -98,7 +91,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     member: put_user.referrer,
                     referred: put_user._id,
                     date,
-                    fees
+                    fees: {
+                      commissionPercent: fees.commissionPercent,
+                      monthlyFee: fees.monthlyFee
+                    }
                   })
                 })
               )
