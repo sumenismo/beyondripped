@@ -1,5 +1,44 @@
+import * as aws from '@aws-sdk/client-ses'
+import { defaultProvider } from '@aws-sdk/credential-provider-node'
 import nodemailer from 'nodemailer'
 import smtpTransport from 'nodemailer-smtp-transport'
+
+const ses = new aws.SES({
+  region: 'ap-northeast-1',
+  //@ts-ignore
+  defaultProvider
+})
+
+export const sendLogMail = async (message: any) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      SES: { ses, aws }
+    })
+
+    transporter.sendMail(
+      {
+        from: 'admin@beyondripped.ph',
+        to: 'admin@beyondripped.ph',
+        subject: 'Message',
+        text: message,
+        ses: {
+          // optional extra arguments for SendRawEmail
+          Tags: [
+            {
+              Name: 'tag_name',
+              Value: 'tag_value'
+            }
+          ]
+        }
+      },
+      (err: any, info: any) => {
+        console.log({ err, info })
+      }
+    )
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export const sendMail = async (message: any) => {
   /*
@@ -47,28 +86,22 @@ export const sendMail = async (message: any) => {
 
   await mailer.sendMail(message, (error: any, info: any) => {
     if (error) {
-      errorMailer.sendMail(
-        {
-          from: 'sumen.delrosario@gmail.com',
-          to: 'sumen.delrosario@gmail.com',
-          subject: 'Verify your registration',
-          text: 'Please verify your registration.',
-          html: `${error}`
-        },
-        () => {}
-      )
-      return console.log(error)
-    }
-    errorMailer.sendMail(
-      {
+      sendLogMail({
         from: 'sumen.delrosario@gmail.com',
         to: 'sumen.delrosario@gmail.com',
         subject: 'Verify your registration',
         text: 'Please verify your registration.',
-        html: `${info}`
-      },
-      () => {}
-    )
+        html: `${error}`
+      })
+      return console.log(error)
+    }
+    sendLogMail({
+      from: 'sumen.delrosario@gmail.com',
+      to: 'sumen.delrosario@gmail.com',
+      subject: 'Verify your registration',
+      text: 'Please verify your registration.',
+      html: `${info?.response ?? 'Sent'}`
+    })
     console.log('Message sent: %s', info)
   })
 }
