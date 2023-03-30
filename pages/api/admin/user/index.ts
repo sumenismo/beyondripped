@@ -100,8 +100,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               .json({ success: false, error: 'Invalid referral code' })
             return
           }
-
-          console.log({ referrer })
         }
 
         const user = await User.create({

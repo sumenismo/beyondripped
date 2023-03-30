@@ -65,7 +65,6 @@ export const MemberForm = ({
         headers: { 'Content-Type': 'application/json' }
       })
       const data = await res.json()
-      console.log({ data })
       if (res.status === 400 && data.error === 'Invalid referral code') {
         setError('referralCode', {
           message: 'Invalid referral code'
