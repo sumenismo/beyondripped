@@ -45,42 +45,29 @@ export const sendLogMail = async (message: any) => {
 }
 
 export const sendMail = async (message: any) => {
-  /*
-    service: 'GoDaddy',
-    host: "smtp.office365.com",  
-    secure: false,
-    port: 587,
-    auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-    } 
-  */
+  return new Promise((resolve, reject) => {
+    try {
+      const mailer = nodemailer.createTransport(
+        smtpTransport({
+          host: 'smtpout.secureserver.net',
+          port: 587,
+          auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
+          },
+          tls: { rejectUnauthorized: false }
+        })
+      )
 
-  /*
-    service: 'gmail',
-      host: 'smtp.gmail.com',
-      auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-      }
-    */
-  const mailer = nodemailer.createTransport(
-    smtpTransport({
-      host: 'smtpout.secureserver.net',
-      port: 587,
-      auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-      },
-      tls: { rejectUnauthorized: false }
-    })
-  )
-
-  await mailer.sendMail(message, (error: any, info: any) => {
-    if (error) {
-      sendLogMail(error)
-      return console.log(error)
+      mailer.sendMail(message, (error: any, info: any) => {
+        if (error) {
+          reject(error)
+          return
+        }
+        resolve(info)
+      })
+    } catch (error) {
+      reject(error)
     }
-    console.log('Message sent: %s', info)
   })
 }

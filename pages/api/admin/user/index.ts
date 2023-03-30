@@ -113,7 +113,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           }
         })
 
-        sendMail({
+        const mail = await sendMail({
           from: 'admin@beyondripped.ph',
           to: user.email,
           subject: 'Verify your registration',
@@ -121,7 +121,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           html: `<p>Your email has been registered to Beyond Ripped as ${req.body.role}, verify your email by clicking this <a href='${process.env.NEXTAUTH_URL}/verify/${user.verify.code}'>link.</a></p>`
         })
 
-        res.status(201).json({ success: true, data: user })
+        res.status(201).json({ success: true, data: user, mail })
       } catch (error: any) {
         console.log({ error })
         if (error?.code === 11000) {
