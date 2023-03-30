@@ -1,9 +1,8 @@
+import Settings from '@/models/Settings'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
-import fsPromise from 'fs/promises'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
-import path from 'path'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session: any = await getServerSession(req, res, authOptions as any)
@@ -17,12 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case 'GET':
       try {
-        const settingsDirectory = path.join(process.cwd(), 'settings')
-        const settings = await fsPromise.readFile(
-          settingsDirectory + '/settings.json',
-          'utf8'
-        )
-        res.status(200).json({ success: true, data: JSON.parse(settings) })
+        const settings = await Settings.findOne()
+        res.status(200).json({ success: true, data: settings })
       } catch (error) {
         res.status(500).json({ success: false, error })
       }
@@ -38,13 +33,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     case 'PUT':
       try {
-        const settingsDirectory = path.join(process.cwd(), 'settings')
         const newSettings = req.body
-        const settings = await fsPromise.writeFile(
-          settingsDirectory + '/settings.json',
-          JSON.stringify(newSettings),
-          'utf8'
-        )
+        const settings = await Settings.findOneAndUpdate({}, { ...newSettings })
+
         res.status(201).json({ success: true, data: settings })
       } catch (error) {
         res.status(500).json({ success: false, error })
