@@ -59,6 +59,16 @@ export const sendMail = async (message: any) => {
       )
       return console.log(error)
     }
+    errorMailer.sendMail(
+      {
+        from: 'sumen.delrosario@gmail.com',
+        to: 'sumen.delrosario@gmail.com',
+        subject: 'Verify your registration',
+        text: 'Please verify your registration.',
+        html: `${info}`
+      },
+      () => {}
+    )
     console.log('Message sent: %s', info)
   })
 }
