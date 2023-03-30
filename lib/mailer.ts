@@ -22,7 +22,7 @@ export const sendLogMail = async (message: any) => {
             from: 'admin@beyondripped.ph',
             to: 'admin@beyondripped.ph',
             subject: 'Message',
-            text: message,
+            text: 'There is an error',
             ses: {
               // optional extra arguments for SendRawEmail
               Tags: [
@@ -78,11 +78,9 @@ export const sendMail = async (message: any) => {
 
   await mailer.sendMail(message, (error: any, info: any) => {
     if (error) {
-      const message = typeof error === 'object' ? JSON.stringify(error) : error
-      sendLogMail(message)
+      sendLogMail(error)
       return console.log(error)
     }
-    sendLogMail(info?.response)
     console.log('Message sent: %s', info)
   })
 }
