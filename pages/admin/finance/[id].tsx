@@ -17,7 +17,7 @@ import { useState } from 'react'
 
 export default function Finance() {
   const [archiveForm, setArchiveFormOpen] = useState(false)
-  const { data, isLoading } = useGetUser()
+  const { data, isLoading } = useGetUser('admin')
   const { mutate: archive, isLoading: isArchiving } = useArchiveUser('FINANCE')
 
   const handleArchive = () => {

@@ -1,18 +1,7 @@
-import { ActiveDateForm } from '@/components/ActiveDateForm'
 import { LabelledValue } from '@/components/LabelledValue'
 import Protected from '@/components/Protected'
 import { useGetUser } from '@/hooks/useGetUser'
-import CloseIcon from '@mui/icons-material/Close'
-import {
-  Box,
-  Button,
-  Chip,
-  Dialog,
-  Grid,
-  IconButton,
-  Paper,
-  Typography
-} from '@mui/material'
+import { Box, Chip, Grid, Paper, Typography } from '@mui/material'
 import { format, isFuture } from 'date-fns'
 import { useState } from 'react'
 
@@ -46,16 +35,7 @@ export default function Member() {
                 />
               </Box>
             </Grid>
-            <Grid item xs={6}>
-              <Box display='flex' justifyContent='flex-end'>
-                <Button
-                  variant='contained'
-                  onClick={() => setActivateFormOpen(true)}
-                >
-                  {isActive ? 'Extend' : 'Activate'}
-                </Button>
-              </Box>
-            </Grid>
+            <Grid item xs={6}></Grid>
             <Grid item xs={12}>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={4}>
@@ -87,32 +67,6 @@ export default function Member() {
           </Grid>
         </Paper>
       </Protected>
-      <Dialog
-        open={activateFormOpen}
-        onClose={() => setActivateFormOpen(false)}
-        fullWidth
-        maxWidth='sm'
-      >
-        <Box
-          sx={{
-            position: 'relative'
-          }}
-        >
-          <Paper sx={{ p: 6 }}>
-            <IconButton
-              sx={{ position: 'absolute', top: 10, right: 10 }}
-              onClick={() => setActivateFormOpen(false)}
-            >
-              <CloseIcon />
-            </IconButton>
-            <ActiveDateForm
-              onSuccess={() => setActivateFormOpen(false)}
-              isActive={isActive}
-              userData={data}
-            />
-          </Paper>
-        </Box>
-      </Dialog>
     </>
   )
 }

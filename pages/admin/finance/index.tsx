@@ -11,7 +11,7 @@ import { useState } from 'react'
 
 export default function Finance() {
   const [openMemberForm, setOpenMemberForm] = useState(false)
-  const { users, isLoading, meta } = useGetUsers('FINANCE')
+  const { users, isLoading, meta } = useGetUsers('FINANCE', 'admin')
 
   return (
     <Protected>

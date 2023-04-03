@@ -18,7 +18,7 @@ import { useState } from 'react'
 
 export default function Admin() {
   const [archiveForm, setArchiveFormOpen] = useState(false)
-  const { data, isLoading } = useGetUser()
+  const { data, isLoading } = useGetUser('admin')
   const { data: userData } = useSession()
   const { mutate: archive, isLoading: isArchiving } = useArchiveUser('ADMIN')
 

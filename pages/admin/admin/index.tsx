@@ -11,7 +11,7 @@ import { useState } from 'react'
 
 export default function Admin() {
   const [openMemberForm, setOpenMemberForm] = useState(false)
-  const { users, isLoading, meta } = useGetUsers('ADMIN')
+  const { users, isLoading, meta } = useGetUsers('ADMIN', 'admin')
 
   return (
     <Protected>

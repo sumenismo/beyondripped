@@ -42,7 +42,7 @@ export default function LoginForm() {
   }
 
   useEffect(() => {
-    if (data) {
+    if (data && (data?.user as any)?.role !== undefined) {
       router.push('/')
     }
   }, [])
