@@ -1,5 +1,3 @@
-import { ActiveDateFormValues } from '@/components/ActiveDateForm'
-import { addMonths } from 'date-fns'
 import { useRouter } from 'next/router'
 import { useMutation, useQueryClient } from 'react-query'
 
@@ -8,13 +6,13 @@ export const useActivateMember = () => {
   const id = router.query.id
   const queryClient = useQueryClient()
 
-  const activateMember = async (args: ActiveDateFormValues) => {
-    const url = `/api/admin/user/${id}`
+  const activateMember = async (args: any) => {
+    const url = `/api/finance/user/${id}`
     const res = await fetch(url, {
       method: 'PUT',
       body: JSON.stringify({
         start: args.start,
-        end: addMonths(args.start, args.months),
+        end: args.end,
         action: 'ACTIVATE'
       }),
       headers: { 'Content-Type': 'application/json' }

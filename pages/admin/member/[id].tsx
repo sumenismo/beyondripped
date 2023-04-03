@@ -108,6 +108,7 @@ export default function Member() {
             <ActiveDateForm
               onSuccess={() => setActivateFormOpen(false)}
               isActive={isActive}
+              userData={data}
             />
           </Paper>
         </Box>

@@ -6,7 +6,6 @@ export const useGetUser = (access: string) => {
   const id = router.query.id
 
   const getUserById = async () => {
-    console.log({ access })
     const url = `/api/${access}/user/${id}`
     const res = await fetch(url, {
       method: 'GET',

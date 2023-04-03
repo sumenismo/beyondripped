@@ -69,7 +69,7 @@ export default function Member() {
                     <Grid item xs={12} md={4}>
                       <LabelledValue label='Code' value={data.referralCode} />
                     </Grid>
-                    {data.activeDate && (
+                    {data.activeDate && data.activeDate?.end && (
                       <Grid item xs={12} md={4}>
                         <LabelledValue
                           label='Active Until'
@@ -108,6 +108,7 @@ export default function Member() {
             <ActiveDateForm
               onSuccess={() => setActivateFormOpen(false)}
               isActive={isActive}
+              userData={data}
             />
           </Paper>
         </Box>

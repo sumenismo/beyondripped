@@ -26,7 +26,6 @@ export async function getServerSideProps(context: any) {
     })
 
     const { user } = await res.json()
-    console.log({ user })
     isVerified = user === undefined || user?.verify.verified || false
   } catch (error) {
     console.log(error)

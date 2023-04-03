@@ -1,10 +1,11 @@
 import { ControlledDatePicker } from '@/components/forms/ControlledDatePicker'
 import { ControlledInput } from '@/components/forms/ControlledInput'
 import { PTextField } from '@/components/forms/PTextField'
+import { Member } from '@/components/MemberList'
 import { useActivateMember } from '@/hooks/useActivateMember'
 import { activeDateFormValidationSchema } from '@/validation/activeDateFormValidationSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Grid, TextField } from '@mui/material'
+import { Button, Grid, TextField, Typography } from '@mui/material'
 import { addMonths, format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -15,11 +16,13 @@ export interface ActiveDateFormValues {
 }
 
 export interface ActiveDateFormProps {
+  userData: Member
   onSuccess?: () => void
   isActive: boolean
 }
 
 export const ActiveDateForm = ({
+  userData,
   onSuccess,
   isActive
 }: ActiveDateFormProps) => {
@@ -27,7 +30,10 @@ export const ActiveDateForm = ({
     useForm<ActiveDateFormValues>({
       resolver: yupResolver(activeDateFormValidationSchema),
       defaultValues: {
-        start: new Date(),
+        start:
+          isActive && userData.activeDate?.start
+            ? new Date(userData.activeDate.start)
+            : new Date(),
         months: 1
       },
       mode: 'onChange'
@@ -40,6 +46,15 @@ export const ActiveDateForm = ({
 
   useEffect(() => {
     if (startVal && monsthVal && !isNaN(monsthVal)) {
+      if (isActive && userData.activeDate?.end) {
+        setEnd(
+          format(
+            addMonths(new Date(userData.activeDate.end), monsthVal),
+            'MM / dd / yyyy'
+          )
+        )
+        return
+      }
       setEnd(format(addMonths(new Date(startVal), monsthVal), 'MM / dd / yyyy'))
       return
     }
@@ -47,7 +62,14 @@ export const ActiveDateForm = ({
   }, [startVal, monsthVal])
 
   const onSubmit = async (args: ActiveDateFormValues) => {
-    activate(args, {
+    const vals =
+      isActive && userData.activeDate?.end
+        ? {
+            start: args.start,
+            end: addMonths(new Date(userData.activeDate.end), args.months)
+          }
+        : { start: args.start, end: addMonths(args.start, args.months) }
+    activate(vals, {
       onSuccess: () => {
         onSuccess?.()
       }
@@ -57,11 +79,19 @@ export const ActiveDateForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant='body1'>
+            {isActive
+              ? 'Set number of months to extend'
+              : 'Set start date and number of months'}
+          </Typography>
+        </Grid>
         <Grid item xs={12} md={5}>
           <ControlledDatePicker
             control={control}
             name='start'
             label='Start Date'
+            disabled={isActive}
           />
         </Grid>
         <Grid item xs={12} md={5}>

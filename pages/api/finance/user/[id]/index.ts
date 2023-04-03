@@ -1,6 +1,3 @@
-import { getMonths } from '@/lib/utils'
-import Referral from '@/models/Referral'
-import Settings from '@/models/Settings'
 import User from '@/models/User'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
@@ -11,8 +8,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session: any = await getServerSession(req, res, authOptions as any)
   await dbConnect()
   const { method } = req
-
-  console.log(session?.user.role)
 
   switch (method) {
     case 'GET':
@@ -73,35 +68,35 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
           ).select('-password')
 
-          if (put_user.referrer) {
-            const referrerUser: any = await User.findOne({
-              _id: put_user.referrer
-            })
+          // if (put_user.referrer) {
+          //   const referrerUser: any = await User.findOne({
+          //     _id: put_user.referrer
+          //   })
 
-            if (
-              referrerUser.activeDate &&
-              new Date(referrerUser.activeDate.start) < new Date() &&
-              new Date(referrerUser.activeDate.end) > new Date()
-            ) {
-              const monthRange = getMonths(new Date(start), new Date(end))
+          //   if (
+          //     referrerUser.activeDate &&
+          //     new Date(referrerUser.activeDate.start) < new Date() &&
+          //     new Date(referrerUser.activeDate.end) > new Date()
+          //   ) {
+          //     const monthRange = getMonths(new Date(start), new Date(end))
 
-              const fees = await Settings.findOne()
+          //     const fees = await Settings.findOne()
 
-              Promise.all(
-                monthRange.map(async date => {
-                  await Referral.create({
-                    member: put_user.referrer,
-                    referred: put_user._id,
-                    date,
-                    fees: {
-                      commissionPercent: fees.commissionPercent,
-                      monthlyFee: fees.monthlyFee
-                    }
-                  })
-                })
-              )
-            }
-          }
+          //     Promise.all(
+          //       monthRange.map(async date => {
+          //         await Referral.create({
+          //           member: put_user.referrer,
+          //           referred: put_user._id,
+          //           date,
+          //           fees: {
+          //             commissionPercent: fees.commissionPercent,
+          //             monthlyFee: fees.monthlyFee
+          //           }
+          //         })
+          //       })
+          //     )
+          //   }
+          // }
 
           res.status(201).json({ success: true, data: put_user })
           break

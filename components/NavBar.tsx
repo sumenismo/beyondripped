@@ -65,6 +65,13 @@ export const NavBar = ({ role }: NavBarProps) => {
                 <Link
                   sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
                   color='#0c1413'
+                  href='/finance/member'
+                >
+                  Members
+                </Link>
+                <Link
+                  sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
+                  color='#0c1413'
                   href='/finance/settings'
                 >
                   Settings
