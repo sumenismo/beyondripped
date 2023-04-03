@@ -18,7 +18,7 @@ import { useState } from 'react'
 
 export default function Member() {
   const [activateFormOpen, setActivateFormOpen] = useState(false)
-  const { data, isLoading } = useGetUser('admin')
+  const { data, isLoading } = useGetUser('finance')
 
   if (isLoading) {
     return <Typography>Loading...</Typography>

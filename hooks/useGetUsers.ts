@@ -2,14 +2,17 @@ import { Role } from '@/pages'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 
-export const useGetUsers = (role: Role) => {
+export const useGetUsers = (
+  role: Role,
+  access: string | undefined = 'admin'
+) => {
   const router = useRouter()
   const search = router.query.search
   const page = router.query.page ?? 1
   const perPage = router.query.perPage ?? 25
 
   const getUsers = async () => {
-    const url = `/api/admin/user?role=${role}${
+    const url = `/api/${access}/user?role=${role}${
       (search && `&search=${search}`) ?? ''
     }${(page && `&page=${page}`) ?? ''}${
       (perPage && `&perPage=${perPage}`) ?? ''

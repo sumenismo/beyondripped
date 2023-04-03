@@ -29,9 +29,14 @@ export interface Member {
 export interface MemberListProps {
   role?: Role
   members?: Member[]
+  access?: string
 }
 
-export const MemberList = ({ members, role = 'MEMBER' }: MemberListProps) => {
+export const MemberList = ({
+  members,
+  role = 'MEMBER',
+  access = 'admin'
+}: MemberListProps) => {
   if (members === undefined || members.length < 1) {
     return <Typography variant='body1'>No data found</Typography>
   }
@@ -102,7 +107,7 @@ export const MemberList = ({ members, role = 'MEMBER' }: MemberListProps) => {
               <TableCell align='right'>
                 <IconButton
                   size='small'
-                  href={`/admin/${role.toLocaleLowerCase()}/${member._id}`}
+                  href={`/${access}/${role.toLocaleLowerCase()}/${member._id}`}
                 >
                   <Edit />
                 </IconButton>

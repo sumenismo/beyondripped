@@ -5,6 +5,7 @@ export const config = {
     '/admin/:path*',
     '/member/:path*',
     '/finance/:path*',
-    '/admin/:path*'
+    '/admin/:path*',
+    '/api/:path*'
   ]
 }

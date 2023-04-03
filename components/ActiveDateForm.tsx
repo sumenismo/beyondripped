@@ -16,9 +16,13 @@ export interface ActiveDateFormValues {
 
 export interface ActiveDateFormProps {
   onSuccess?: () => void
+  isActive: boolean
 }
 
-export const ActiveDateForm = ({ onSuccess }: ActiveDateFormProps) => {
+export const ActiveDateForm = ({
+  onSuccess,
+  isActive
+}: ActiveDateFormProps) => {
   const { handleSubmit, control, watch, formState } =
     useForm<ActiveDateFormValues>({
       resolver: yupResolver(activeDateFormValidationSchema),
@@ -85,7 +89,7 @@ export const ActiveDateForm = ({ onSuccess }: ActiveDateFormProps) => {
             type='submit'
             disabled={!formState.isValid || isLoading}
           >
-            Activate
+            {isActive ? 'Extend' : 'Activate'}
           </Button>
         </Grid>
       </Grid>

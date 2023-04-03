@@ -1,12 +1,13 @@
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 
-export const useGetUser = () => {
+export const useGetUser = (access: string) => {
   const router = useRouter()
   const id = router.query.id
 
   const getUserById = async () => {
-    const url = `/api/admin/user/${id}`
+    console.log({ access })
+    const url = `/api/${access}/user/${id}`
     const res = await fetch(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
