@@ -29,7 +29,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         const id = req.query.id
         const referral = await Referral.findOneAndUpdate(
-          { _id: id },
+          { _id: id, isActive: true },
           { isPaid: true },
           { new: true }
         )

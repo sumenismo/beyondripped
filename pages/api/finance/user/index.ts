@@ -131,7 +131,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(400).json({ success: false, data: { errCode: error?.code } })
       }
       break
-
     default:
       break
   }

@@ -8,6 +8,7 @@ export interface Referral {
   referred: Member
   date: Date
   isPaid?: boolean
+  isActive?: boolean
   fees: {
     monthlyFee: number
     commissionPercent: number

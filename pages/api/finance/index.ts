@@ -29,6 +29,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         const pipeline: any = [
           {
+            $match: {
+              isActive: true
+            }
+          },
+          {
             $addFields: {
               currentMonth: { $month: dateFilter },
               currentYear: { $year: dateFilter }
@@ -135,144 +140,3 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break
   }
 }
-
-/*
-          {
-            $match: {
-              member: new mongoose.Types.ObjectId('6418fdbd38a8d4219bb74ab1')
-            }
-          },
-
-try {
-        const user = await User.aggregate([
-          {
-            $match: {
-              activeDate: {
-                $exists: true
-              },
-              referrer: {
-                $exists: true
-              }
-            }
-          },
-          {
-            $match: {
-              $and: [
-                {
-                  'activeDate.start': {
-                    $ne: null
-                  }
-                },
-                {
-                  'activeDate.end': {
-                    $ne: null
-                  }
-                },
-                {
-                  'activeDate.start': {
-                    $type: 'date'
-                  }
-                },
-                {
-                  'activeDate.end': {
-                    $type: 'date'
-                  }
-                }
-              ]
-            }
-          },
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'referrer',
-              foreignField: '_id',
-              as: 'referredUser'
-            }
-          },
-          {
-            $addFields: {
-              yearDiff: {
-                $subtract: [
-                  { $year: '$activeDate.end' },
-                  { $year: '$activeDate.start' }
-                ]
-              },
-              monthDiff: {
-                $subtract: [
-                  { $month: '$activeDate.end' },
-                  { $month: '$activeDate.start' }
-                ]
-              }
-            }
-          },
-          {
-            $addFields: {
-              totalMonths: {
-                $cond: {
-                  if: {
-                    $eq: [
-                      { $year: '$activeDate.end' },
-                      { $year: '$activeDate.start' }
-                    ]
-                  },
-                  then: { $add: ['$monthDiff', 1] },
-                  else: {
-                    $add: [{ $multiply: ['$yearDiff', 12] }, '$monthDiff', 1]
-                  }
-                }
-              }
-            }
-          },
-          {
-            $addFields: {
-              monthRange: {
-                $range: [
-                  { $month: '$activeDate.start' },
-                  {
-                    $add: [{ $month: '$activeDate.start' }, '$totalMonths', -1]
-                  }
-                ]
-              }
-            }
-          },
-
-          {
-            $project: {
-              email: 1,
-              name: 1,
-              role: 1,
-              referrer: 1,
-              referralCode: 1,
-              activeDate: 1,
-              verify: 1,
-              referredUser: {
-                $arrayElemAt: ['$referredUser', 0]
-              },
-              activeMonths: {
-                $map: {
-                  input: '$monthRange',
-                  as: 'month',
-                  in: {
-                    $dateToString: {
-                      format: '%Y-%m',
-                      date: {
-                        $dateFromParts: {
-                          year: { $year: '$activeDate.start' },
-                          month: '$$month',
-                          day: 1
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        ])
-
-        res.status(200).json({ success: true, data: user })
-      } catch (error) {
-        console.log(error)
-        res.status(500).json({ success: false, error })
-      }
-*/

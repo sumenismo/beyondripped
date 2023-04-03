@@ -1,8 +1,64 @@
+import { Member } from '@/components/MemberList'
+import { getMonths } from '@/lib/utils'
+import Referral from '@/models/Referral'
+import Settings from '@/models/Settings'
 import User from '@/models/User'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
+
+const checkIfBothActive = (member: Member, date: string) => {
+  if (!member.activeDate?.end || !member.activeDate?.start) {
+    console.log('Referrer INACTIVE')
+    return false
+  }
+  if (
+    new Date(date) <= new Date(member.activeDate.end) &&
+    new Date(date) >= new Date(member.activeDate.start)
+  ) {
+    console.log('Referrer ACTIVE')
+    return true
+  }
+  console.log('Default to FALSE')
+  return false
+}
+
+const setReferrals = async (
+  createdUser: Member,
+  start: string,
+  end: string
+) => {
+  try {
+    if (createdUser.referrer) {
+      const referrerUser: any = await User.findOne({
+        _id: createdUser.referrer
+      })
+
+      const monthRange = getMonths(new Date(start), new Date(end))
+
+      const fees = await Settings.findOne()
+
+      Promise.all(
+        monthRange.map(async (date: any) => {
+          const isActive = checkIfBothActive(referrerUser, date)
+          await Referral.create({
+            member: referrerUser._id,
+            referred: createdUser._id,
+            date,
+            isActive,
+            fees: {
+              commissionPercent: fees.commissionPercent,
+              monthlyFee: fees.monthlyFee
+            }
+          })
+        })
+      )
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session: any = await getServerSession(req, res, authOptions as any)
@@ -68,35 +124,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
           ).select('-password')
 
-          // if (put_user.referrer) {
-          //   const referrerUser: any = await User.findOne({
-          //     _id: put_user.referrer
-          //   })
-
-          //   if (
-          //     referrerUser.activeDate &&
-          //     new Date(referrerUser.activeDate.start) < new Date() &&
-          //     new Date(referrerUser.activeDate.end) > new Date()
-          //   ) {
-          //     const monthRange = getMonths(new Date(start), new Date(end))
-
-          //     const fees = await Settings.findOne()
-
-          //     Promise.all(
-          //       monthRange.map(async date => {
-          //         await Referral.create({
-          //           member: put_user.referrer,
-          //           referred: put_user._id,
-          //           date,
-          //           fees: {
-          //             commissionPercent: fees.commissionPercent,
-          //             monthlyFee: fees.monthlyFee
-          //           }
-          //         })
-          //       })
-          //     )
-          //   }
-          // }
+          setReferrals(put_user, start, end)
 
           res.status(201).json({ success: true, data: put_user })
           break

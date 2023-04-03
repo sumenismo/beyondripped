@@ -31,6 +31,10 @@ const ReferralSchema = new mongoose.Schema({
     type: Boolean,
     required: false
   },
+  isActive: {
+    type: Boolean,
+    required: false
+  },
   fees: {
     type: FeesSchema,
     required: true
