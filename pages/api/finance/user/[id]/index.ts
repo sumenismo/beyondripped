@@ -66,7 +66,7 @@ const findAndUpdateReferrals = async (
   end: Date
 ) => {
   try {
-    const referrals = await Referral.updateMany(
+    await Referral.updateMany(
       {
         member: referrer._id,
         isActive: false,
@@ -79,7 +79,6 @@ const findAndUpdateReferrals = async (
         isActive: true
       }
     )
-    console.log({ referrals })
   } catch (error) {
     console.log(error)
   }
