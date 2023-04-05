@@ -10,17 +10,14 @@ import { getServerSession } from 'next-auth'
 
 const checkIfBothActive = (member: Member, date: string) => {
   if (!member.activeDate?.end || !member.activeDate?.start) {
-    console.log('Referrer INACTIVE')
     return false
   }
   if (
     new Date(date) <= new Date(member.activeDate.end) &&
     new Date(date) >= new Date(member.activeDate.start)
   ) {
-    console.log('Referrer ACTIVE')
     return true
   }
-  console.log('Default to FALSE')
   return false
 }
 
