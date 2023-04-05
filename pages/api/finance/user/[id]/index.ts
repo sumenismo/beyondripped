@@ -35,7 +35,10 @@ const setReferrals = async (
         _id: createdUser.referrer
       })
 
-      const monthRange = getMonths(new Date(start), new Date(end))
+      const monthRange =
+        createdUser.activeDate?.start && createdUser.activeDate?.end
+          ? getMonths(new Date(createdUser.activeDate.end), new Date(end))
+          : getMonths(new Date(start), new Date(end))
 
       const fees = await Settings.findOne()
 
@@ -55,6 +58,13 @@ const setReferrals = async (
         })
       )
     }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const findAndUpdateReferrals = (referrer: Member) => {
+  try {
   } catch (error) {
     console.log(error)
   }
@@ -107,26 +117,32 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       switch (action) {
         case 'ACTIVATE':
-          const { start, end } = req.body
+          try {
+            const { start, end } = req.body
 
-          if (!start || !end) {
-            res.status(400).json({ success: false, error: 'Invalid data' })
-            return
+            if (!start || !end) {
+              res.status(400).json({ success: false, error: 'Invalid data' })
+              return
+            }
+
+            const put_user = await User.findOneAndUpdate(
+              { _id: put_userId },
+              {
+                activeDate: {
+                  start: new Date(start),
+                  end: new Date(end)
+                }
+              }
+            ).select('-password')
+
+            setReferrals(put_user, start, end)
+            findAndUpdateReferrals(put_user)
+
+            res.status(201).json({ success: true, data: put_user })
+          } catch (error) {
+            res.status(500).json({ success: false, error })
           }
 
-          const put_user = await User.findOneAndUpdate(
-            { _id: put_userId },
-            {
-              activeDate: {
-                start: new Date(start),
-                end: new Date(end)
-              }
-            }
-          ).select('-password')
-
-          setReferrals(put_user, start, end)
-
-          res.status(201).json({ success: true, data: put_user })
           break
 
         case 'ARCHIVE':
