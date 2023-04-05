@@ -60,8 +60,26 @@ const setReferrals = async (
   }
 }
 
-const findAndUpdateReferrals = (referrer: Member) => {
+const findAndUpdateReferrals = async (
+  referrer: Member,
+  start: Date,
+  end: Date
+) => {
   try {
+    const referrals = await Referral.updateMany(
+      {
+        member: referrer._id,
+        isActive: false,
+        date: {
+          $gte: new Date(start),
+          $lt: new Date(end)
+        }
+      },
+      {
+        isActive: true
+      }
+    )
+    console.log({ referrals })
   } catch (error) {
     console.log(error)
   }
@@ -133,7 +151,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             ).select('-password')
 
             setReferrals(put_user, start, end)
-            findAndUpdateReferrals(put_user)
+            findAndUpdateReferrals(put_user, start, end)
 
             res.status(201).json({ success: true, data: put_user })
           } catch (error) {
