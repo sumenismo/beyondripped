@@ -23,7 +23,7 @@ export const ReferralsList = ({ commissions }: ReferralsListProps) => {
             <TableCell>Code</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
-            <TableCell>Referred</TableCell>
+            <TableCell>Referral</TableCell>
             <TableCell>Amount</TableCell>
             <TableCell>Status</TableCell>
             <TableCell align='right'></TableCell>

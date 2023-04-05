@@ -104,13 +104,18 @@ export const MemberList = ({
                   </TableCell>
                 </>
               )}
+
               <TableCell align='right'>
-                <IconButton
-                  size='small'
-                  href={`/${access}/${role.toLocaleLowerCase()}/${member._id}`}
-                >
-                  <Edit />
-                </IconButton>
+                {access === 'finance' && (
+                  <IconButton
+                    size='small'
+                    href={`/${access}/${role.toLocaleLowerCase()}/${
+                      member._id
+                    }`}
+                  >
+                    <Edit />
+                  </IconButton>
+                )}
               </TableCell>
             </TableRow>
           ))}
