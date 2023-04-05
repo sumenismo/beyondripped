@@ -27,6 +27,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         const pipeline: any = [
           {
+            $match: {
+              isActive: true
+            }
+          },
+          {
             $addFields: {
               currentMonth: { $month: dateFilter },
               currentYear: { $year: dateFilter }
