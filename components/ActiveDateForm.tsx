@@ -92,6 +92,12 @@ export const ActiveDateForm = ({
             name='start'
             label='Start Date'
             disabled={isActive}
+            //@ts-ignore
+            min={
+              isActive && userData.activeDate?.start
+                ? new Date(userData.activeDate.start)
+                : new Date()
+            }
           />
         </Grid>
         <Grid item xs={12} md={5}>
