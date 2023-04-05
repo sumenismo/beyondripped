@@ -21,6 +21,31 @@ const checkIfBothActive = (member: Member, date: string) => {
   return false
 }
 
+const getDateRange = (
+  nonUpdateUserData: Member,
+  start: string,
+  end: string
+) => {
+  //extending and currently inactive
+  if (
+    nonUpdateUserData.activeDate?.start &&
+    nonUpdateUserData.activeDate?.end &&
+    new Date(nonUpdateUserData.activeDate.end) < new Date()
+  ) {
+    return getMonths(new Date(start), new Date(end))
+  }
+
+  //extending and currently active
+  if (
+    nonUpdateUserData.activeDate?.start &&
+    nonUpdateUserData.activeDate?.end
+  ) {
+    return getMonths(new Date(nonUpdateUserData.activeDate.end), new Date(end))
+  }
+  //newly activated
+  return getMonths(new Date(start), new Date(end))
+}
+
 const setReferrals = async (
   createdUser: Member,
   start: string,
@@ -32,10 +57,7 @@ const setReferrals = async (
         _id: createdUser.referrer
       })
 
-      const monthRange =
-        createdUser.activeDate?.start && createdUser.activeDate?.end
-          ? getMonths(new Date(createdUser.activeDate.end), new Date(end))
-          : getMonths(new Date(start), new Date(end))
+      const monthRange = getDateRange(createdUser, start, end)
 
       const fees = await Settings.findOne()
 
