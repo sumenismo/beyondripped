@@ -1,3 +1,4 @@
+import Service from '@/models/Service'
 import User from '@/models/User'
 import mongoose from 'mongoose'
 
@@ -9,6 +10,11 @@ const FeesSchema = new mongoose.Schema({
   commissionPercent: {
     type: Number,
     required: true
+  },
+  service: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: Service
   }
 })
 
@@ -43,6 +49,3 @@ const ReferralSchema = new mongoose.Schema({
 
 export default mongoose.models.Referral ||
   mongoose.model('Referral', ReferralSchema)
-
-// echpacmn
-// ilnamrnm
