@@ -45,7 +45,7 @@ export const NavBar = ({ role }: NavBarProps) => {
                   Admin
                 </Link>
                 <Link
-                  sx={{ textDecoration: 'none', mr: 2, ml: 2 }}
+                  sx={{ textDecoration: 'none', mr: 2 }}
                   color='#0c1413'
                   href='/admin/services'
                 >

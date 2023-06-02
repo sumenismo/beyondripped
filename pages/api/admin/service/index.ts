@@ -9,6 +9,7 @@ export interface ServiceFormArgs {
   fee: number
   commission: number
   isMultiple?: boolean
+  _id?: string
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -65,8 +66,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       res.status(200).json({ success: true, data })
       break
-    case 'UPDATE':
-      res.status(405)
+    case 'PUT':
+      const { _id, ...rest } = req.body
+      const updateService = await Service.findOneAndUpdate({ _id }, { ...rest })
+      res.status(201).json({ success: true, data: updateService })
       break
     case 'DELETE':
       res.status(405)

@@ -1,6 +1,8 @@
+import { BRPagination } from '@/components/BRPagination'
 import Protected from '@/components/Protected'
 import { ServiceForm } from '@/components/ServiceForm'
 import { ServicesList } from '@/components/ServicesList'
+import { useGetServices } from '@/hooks/useGetServices'
 import CloseIcon from '@mui/icons-material/Close'
 import {
   Box,
@@ -10,10 +12,13 @@ import {
   IconButton,
   Typography
 } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 export default function Services() {
   const [openServiceFrom, setOpenServiceForm] = useState(false)
+  const { services, meta, isLoading } = useGetServices()
+  const router = useRouter()
 
   return (
     <>
@@ -39,7 +44,16 @@ export default function Services() {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <ServicesList />
+            {isLoading ? (
+              <Typography variant='body1'>Loading...</Typography>
+            ) : (
+              <ServicesList services={services} />
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            {meta && meta.count ? (
+              <BRPagination count={meta.count} dataPerPage={meta.perPage} />
+            ) : null}
           </Grid>
         </Grid>
       </Protected>
@@ -56,7 +70,15 @@ export default function Services() {
         >
           <IconButton
             sx={{ position: 'absolute', top: 10, right: 10 }}
-            onClick={() => setOpenServiceForm(false)}
+            onClick={() => {
+              setOpenServiceForm(false)
+              router.replace({
+                query: {
+                  ...router.query,
+                  id: undefined
+                }
+              })
+            }}
           >
             <CloseIcon />
           </IconButton>

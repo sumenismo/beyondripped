@@ -97,7 +97,12 @@ export const ServiceForm = ({
           <Grid item xs={12}>
             <Button
               variant='contained'
-              disabled={!formState.isDirty || isLoading || !formState.isValid}
+              disabled={
+                !formState.isDirty ||
+                isLoading ||
+                !formState.isValid ||
+                !formState.touchedFields
+              }
               type='submit'
             >
               {isLoading ? 'Saving...' : 'Save'}

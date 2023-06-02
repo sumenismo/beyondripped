@@ -7,7 +7,7 @@ export const useService = () => {
   const createService = async (args: ServiceFormArgs) => {
     const url = '/api/admin/service'
     const res = await fetch(url, {
-      method: 'POST',
+      method: args._id !== undefined ? 'PUT' : 'POST',
       body: JSON.stringify(args),
       headers: { 'Content-Type': 'application/json' }
     })

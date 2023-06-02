@@ -1,8 +1,17 @@
+import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 
 export const useGetServices = () => {
+  const router = useRouter()
+  const search = router.query.search
+  const page = router.query.page ?? 1
+  const perPage = router.query.perPage ?? 25
+
   const getServices = async () => {
-    const res = await fetch('/api/admin/service', {
+    const url = `/api/admin/service?${(search && `&search=${search}`) ?? ''}${
+      (page && `&page=${page}`) ?? ''
+    }${(perPage && `&perPage=${perPage}`) ?? ''}`
+    const res = await fetch(url, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     })
@@ -13,7 +22,8 @@ export const useGetServices = () => {
   const { data, ...rest } = useQuery('services', getServices)
 
   return {
-    data: data?.data,
+    services: data?.data.data,
+    meta: data?.data.meta,
     ...rest
   }
 }
