@@ -72,7 +72,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(201).json({ success: true, data: updateService })
       break
     case 'DELETE':
-      res.status(405)
+      const { _id: serviceId } = req.body
+      const deleteService = await Service.findOneAndUpdate(
+        { _id: serviceId },
+        { isActive: false }
+      )
+      res.status(201).json({ success: true, data: deleteService })
       break
 
     default:
