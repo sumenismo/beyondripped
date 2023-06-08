@@ -169,6 +169,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               '-password'
             )
 
+            const enrolled = put_user.services.find((el: any) =>
+              el.serviceId.equals(serviceToEnroll._id)
+            )
+
+            if (enrolled && !serviceToEnroll.isMultiple) {
+              res
+                .status(401)
+                .json({ success: false, error: 'Already enrolled' })
+              return
+            }
+
             put_user.services.push({
               serviceId: serviceToEnroll._id,
               name: serviceToEnroll.name,
@@ -184,7 +195,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             findAndUpdateReferrals(put_user, start, end)
 
             await put_user.save()
-
             res.status(201).json({ success: true, data: put_user })
           } catch (error) {
             res.status(500).json({ success: false, error })

@@ -18,6 +18,11 @@ export const useActivateMember = () => {
       headers: { 'Content-Type': 'application/json' }
     })
 
+    if (!res.ok) {
+      const error = res.status === 401 ? 'Already enrolled' : 'Error enrolling'
+      return Promise.reject(new Error(error))
+    }
+
     return res.json()
   }
 

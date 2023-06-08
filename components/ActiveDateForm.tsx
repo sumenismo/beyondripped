@@ -20,15 +20,17 @@ export interface ActiveDateFormValues {
 export interface ActiveDateFormProps {
   userData: Member
   onSuccess?: () => void
+  onError?: () => void
   isActive: boolean
 }
 
 export const ActiveDateForm = ({
   userData,
   onSuccess,
+  onError,
   isActive
 }: ActiveDateFormProps) => {
-  const { handleSubmit, control, watch, formState, setValue } =
+  const { handleSubmit, control, watch, formState, setValue, setError } =
     useForm<ActiveDateFormValues>({
       resolver: yupResolver(activeDateFormValidationSchema),
       defaultValues: {
@@ -57,6 +59,9 @@ export const ActiveDateForm = ({
     activate(args, {
       onSuccess: () => {
         onSuccess?.()
+      },
+      onError: error => {
+        setError('service', { message: error?.message })
       }
     })
   }
