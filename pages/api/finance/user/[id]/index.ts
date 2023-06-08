@@ -4,6 +4,7 @@ import Referral from '@/models/Referral'
 import Service from '@/models/Service'
 import Settings from '@/models/Settings'
 import User from '@/models/User'
+import UserService from '@/models/UserService'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -126,7 +127,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const user = await User.findById(userId)
         .populate('referrer')
-        .populate({ path: 'services', populate: { path: 'serviceId' } })
         .select('-password')
       res.status(200).json({ success: true, data: user })
       break
@@ -154,6 +154,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const action = req.body.action
 
       switch (action) {
+        //should be moved to a new endpoint: /finance/userservice
         case 'ENROLL':
           try {
             const { start, end, service: serviceId } = req.body
@@ -169,19 +170,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               '-password'
             )
 
-            const enrolled = put_user.services.find((el: any) =>
-              el.serviceId.equals(serviceToEnroll._id)
-            )
+            const enrolled = await UserService.find({
+              user: put_userId,
+              service: serviceId
+            })
 
-            if (enrolled && !serviceToEnroll.isMultiple) {
+            if (
+              enrolled &&
+              enrolled.length > 0 &&
+              !serviceToEnroll.isMultiple
+            ) {
               res
                 .status(401)
                 .json({ success: false, error: 'Already enrolled' })
               return
             }
 
-            put_user.services.push({
-              serviceId: serviceToEnroll._id,
+            const newEnrolled = await UserService.create({
+              user: put_userId,
+              service: serviceToEnroll._id,
               name: serviceToEnroll.name,
               fee: serviceToEnroll.fee,
               commission: serviceToEnroll.commission,
@@ -191,11 +198,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               }
             })
 
-            setReferrals(put_user, start, end)
-            findAndUpdateReferrals(put_user, start, end)
+            // setReferrals(put_user, start, end)
+            // findAndUpdateReferrals(put_user, start, end)
 
-            await put_user.save()
-            res.status(201).json({ success: true, data: put_user })
+            res.status(201).json({
+              success: true,
+              data: { user: put_user, enrolled: newEnrolled }
+            })
           } catch (error) {
             res.status(500).json({ success: false, error })
           }

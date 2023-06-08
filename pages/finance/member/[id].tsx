@@ -67,7 +67,7 @@ export default function Member() {
                   <Divider />
                 </Grid>
                 <Grid item xs={12}>
-                  <EnrolledList services={data.services} />
+                  <EnrolledList />
                 </Grid>
               </Grid>
             </Grid>

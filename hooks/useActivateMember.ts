@@ -28,7 +28,7 @@ export const useActivateMember = () => {
 
   return useMutation(activateMember, {
     onSuccess: () => {
-      queryClient.invalidateQueries(`user-${id}`)
+      queryClient.invalidateQueries(`user-services-${id}`)
     },
     onError: (error: any) => {
       console.log(error?.message)
