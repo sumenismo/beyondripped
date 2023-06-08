@@ -11,9 +11,9 @@ export const useActivateMember = () => {
     const res = await fetch(url, {
       method: 'PUT',
       body: JSON.stringify({
-        start: args.start,
-        end: args.end,
-        action: 'ACTIVATE'
+        ...args,
+        id,
+        action: 'ENROLL'
       }),
       headers: { 'Content-Type': 'application/json' }
     })

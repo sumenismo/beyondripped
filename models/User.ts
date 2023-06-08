@@ -33,6 +33,29 @@ const activeDate = new mongoose.Schema({
   }
 })
 
+const userService = new mongoose.Schema({
+  serviceId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Service'
+  },
+  fee: {
+    type: Number,
+    required: true
+  },
+  commission: {
+    type: Number,
+    required: true
+  },
+  isMultiple: {
+    type: Boolean
+  },
+  activeDate: {
+    type: activeDate,
+    required: true
+  }
+})
+
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   name: { type: String, required: false },
@@ -63,6 +86,10 @@ const UserSchema = new mongoose.Schema({
   },
   isArchived: {
     type: Boolean,
+    required: false
+  },
+  services: {
+    type: [userService],
     required: false
   }
 })

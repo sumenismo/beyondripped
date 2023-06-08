@@ -1,4 +1,5 @@
 import { ActiveDateForm } from '@/components/ActiveDateForm'
+import { EnrolledList } from '@/components/EnrolledList'
 import { LabelledValue } from '@/components/LabelledValue'
 import Protected from '@/components/Protected'
 import { useGetUser } from '@/hooks/useGetUser'
@@ -6,14 +7,14 @@ import CloseIcon from '@mui/icons-material/Close'
 import {
   Box,
   Button,
-  Chip,
   Dialog,
+  Divider,
   Grid,
   IconButton,
   Paper,
   Typography
 } from '@mui/material'
-import { format, isFuture } from 'date-fns'
+import { isFuture } from 'date-fns'
 import { useState } from 'react'
 
 export default function Member() {
@@ -38,21 +39,15 @@ export default function Member() {
       <Protected>
         <Paper sx={{ p: 4 }} elevation={0}>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Box display='flex' justifyContent='flex-start'>
-                <Chip
-                  label={isActive ? 'Active' : 'Inactive'}
-                  color={isActive ? 'success' : 'default'}
-                />
-              </Box>
-            </Grid>
+            <Grid item xs={6}></Grid>
             <Grid item xs={6}>
               <Box display='flex' justifyContent='flex-end'>
                 <Button
                   variant='contained'
                   onClick={() => setActivateFormOpen(true)}
+                  sx={{ ml: 2 }}
                 >
-                  {isActive ? 'Extend' : 'Activate'}
+                  Enroll
                 </Button>
               </Box>
             </Grid>
@@ -64,24 +59,16 @@ export default function Member() {
                 <Grid item xs={12} md={4}>
                   <LabelledValue label='Email' value={data.email} />
                 </Grid>
-                {data.role === 'MEMBER' && (
-                  <>
-                    <Grid item xs={12} md={4}>
-                      <LabelledValue label='Code' value={data.referralCode} />
-                    </Grid>
-                    {data.activeDate && data.activeDate?.end && (
-                      <Grid item xs={12} md={4}>
-                        <LabelledValue
-                          label='Active Until'
-                          value={format(
-                            new Date(data.activeDate?.end as any),
-                            'MM / dd / yyyy'
-                          )}
-                        />
-                      </Grid>
-                    )}
-                  </>
-                )}
+
+                <Grid item xs={12}>
+                  <Typography variant='subtitle1' fontWeight='900'>
+                    Services
+                  </Typography>
+                  <Divider />
+                </Grid>
+                <Grid item xs={12}>
+                  <EnrolledList services={data.services} />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

@@ -1,6 +1,7 @@
 import { Member } from '@/components/MemberList'
 import { getMonths } from '@/lib/utils'
 import Referral from '@/models/Referral'
+import Service from '@/models/Service'
 import Settings from '@/models/Settings'
 import User from '@/models/User'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
@@ -125,6 +126,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const user = await User.findById(userId)
         .populate('referrer')
+        .populate({ path: 'services', populate: { path: 'serviceId' } })
         .select('-password')
       res.status(200).json({ success: true, data: user })
       break
@@ -152,27 +154,36 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const action = req.body.action
 
       switch (action) {
-        case 'ACTIVATE':
+        case 'ENROLL':
           try {
-            const { start, end } = req.body
+            const { start, end, service: serviceId } = req.body
 
-            if (!start || !end) {
+            if (!start || !end || !serviceId) {
               res.status(400).json({ success: false, error: 'Invalid data' })
               return
             }
 
-            const put_user = await User.findOneAndUpdate(
-              { _id: put_userId },
-              {
-                activeDate: {
-                  start: new Date(start),
-                  end: new Date(end)
-                }
+            const serviceToEnroll = await Service.findOne({ _id: serviceId })
+
+            const put_user = await User.findOne({ _id: put_userId }).select(
+              '-password'
+            )
+
+            put_user.services.push({
+              serviceId: serviceToEnroll._id,
+              name: serviceToEnroll.name,
+              fee: serviceToEnroll.fee,
+              commission: serviceToEnroll.commission,
+              activeDate: {
+                start: new Date(start),
+                end: new Date(end)
               }
-            ).select('-password')
+            })
 
             setReferrals(put_user, start, end)
             findAndUpdateReferrals(put_user, start, end)
+
+            await put_user.save()
 
             res.status(201).json({ success: true, data: put_user })
           } catch (error) {
