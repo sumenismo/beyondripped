@@ -1,4 +1,4 @@
-import { addMonths } from 'date-fns'
+import { addMonths, isEqual } from 'date-fns'
 import { ControllerFieldState } from 'react-hook-form'
 
 export const getFieldColor = (fieldState: ControllerFieldState) => {
@@ -20,6 +20,10 @@ export const addDays = (date: Date, days: number) => {
 }
 
 export const getMonths = (start: Date, end: Date) => {
+  if (isEqual(start, end)) {
+    return [start]
+  }
+
   const range: Date[] = []
   let currentMonth = start
 

@@ -16,6 +16,7 @@ export interface UserService {
   }
   commission: number
   fee: number
+  serviceType: 'MONTHLY' | 'SESSION'
 }
 
 export const EnrolledList = () => {

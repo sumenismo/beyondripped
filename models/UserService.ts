@@ -30,8 +30,10 @@ const UserServiceSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  isMultiple: {
-    type: Boolean
+  serviceType: {
+    type: String,
+    enum: ['MONTHLY', 'SESSION'],
+    required: true
   },
   activeDate: {
     type: activeDate,
