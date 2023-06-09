@@ -1,4 +1,5 @@
 import { Member } from '@/components/MemberList'
+import { Service } from '@/components/ServiceCard'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 
@@ -12,6 +13,7 @@ export interface Referral {
   fees: {
     monthlyFee: number
     commissionPercent: number
+    service: Service
   }
 }
 

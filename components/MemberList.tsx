@@ -1,7 +1,6 @@
 import { Role } from '@/pages'
 import { Edit } from '@mui/icons-material'
 import {
-  Chip,
   IconButton,
   Paper,
   Table,
@@ -41,17 +40,6 @@ export const MemberList = ({
     return <Typography variant='body1'>No data found</Typography>
   }
 
-  const getActiveStatus = (member: Member) => {
-    if (member.activeDate?.start && member.activeDate?.end) {
-      const today = new Date()
-      return (
-        today > new Date(member.activeDate?.start) &&
-        today < new Date(member.activeDate?.end)
-      )
-    }
-    return false
-  }
-
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
@@ -63,9 +51,6 @@ export const MemberList = ({
               <>
                 <TableCell>Referral Code</TableCell>
                 <TableCell>Referred By</TableCell>
-                <TableCell>Start</TableCell>
-                <TableCell>End</TableCell>
-                <TableCell>Status</TableCell>
               </>
             )}
             <TableCell align='right'></TableCell>
@@ -84,23 +69,8 @@ export const MemberList = ({
               {role === 'MEMBER' && (
                 <>
                   <TableCell>{member.referralCode}</TableCell>
-
                   <TableCell>
                     {member.referrer?.name ?? member.referrer?.email ?? '-'}
-                  </TableCell>
-                  <TableCell>
-                    {member.activeDate?.start &&
-                      new Date(member.activeDate?.start)?.toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    {member.activeDate?.end &&
-                      new Date(member.activeDate?.end)?.toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={getActiveStatus(member) ? 'Active' : 'Inactive'}
-                      color={getActiveStatus(member) ? 'success' : 'default'}
-                    />
                   </TableCell>
                 </>
               )}

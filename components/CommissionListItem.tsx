@@ -39,6 +39,7 @@ export const CommissionListItem = ({ com }: CommissionListItemProps) => {
         />
       </TableCell> */}
       <TableCell>{com.referred.name}</TableCell>
+      <TableCell>{com.fees.service.name}</TableCell>
       <TableCell>{getAmount()}</TableCell>
       <TableCell>
         <Chip

@@ -1,4 +1,5 @@
 import Referral from '@/models/Referral'
+import Service from '@/models/Service'
 import User from '@/models/User'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import dbConnect from '@lib/mongodb'
@@ -70,6 +71,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           },
           {
             $unwind: '$referred'
+          },
+          {
+            $lookup: {
+              from: Service.collection.name,
+              localField: 'fees.service',
+              foreignField: '_id',
+              as: 'fees.service'
+            }
+          },
+          {
+            $unwind: '$fees.service'
           }
         ]
 
