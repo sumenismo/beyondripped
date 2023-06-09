@@ -4,7 +4,10 @@ import * as yup from 'yup'
 export const serviceFormValidationSchema: yup.Schema<ServiceFormArgs> =
   yup.object({
     name: yup.string().required('Required field'),
-    isMultiple: yup.boolean(),
+    serviceType: yup
+      .string()
+      .oneOf(['MONTHLY', 'SESSION'])
+      .required('Required field'),
     fee: yup
       .number()
       .required('Required field')

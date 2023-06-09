@@ -24,22 +24,13 @@ export interface ActiveDateFormProps {
   isActive: boolean
 }
 
-export const ActiveDateForm = ({
-  userData,
-  onSuccess,
-  onError,
-  isActive
-}: ActiveDateFormProps) => {
+export const ActiveDateForm = ({ onSuccess }: ActiveDateFormProps) => {
   const { handleSubmit, control, watch, formState, setValue, setError } =
     useForm<ActiveDateFormValues>({
       resolver: yupResolver(activeDateFormValidationSchema),
       defaultValues: {
-        start: userData.activeDate?.start
-          ? new Date(userData.activeDate.start)
-          : new Date(),
-        end: userData.activeDate?.end
-          ? new Date(userData.activeDate.end)
-          : new Date()
+        start: new Date(),
+        end: new Date()
       },
       mode: 'onChange'
     })

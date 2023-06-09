@@ -14,8 +14,10 @@ export const ServiceSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  isMultiple: {
-    type: Boolean
+  serviceType: {
+    type: String,
+    enum: ['MONTHLY', 'SESSION'],
+    required: true
   },
   isActive: {
     type: Boolean,

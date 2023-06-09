@@ -1,8 +1,8 @@
 import { Member } from '@/components/MemberList'
+import { Service as ServiceInterface } from '@/components/ServiceCard'
 import { getMonths } from '@/lib/utils'
 import Referral from '@/models/Referral'
 import Service from '@/models/Service'
-import Settings from '@/models/Settings'
 import User from '@/models/User'
 import UserService from '@/models/UserService'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
@@ -50,8 +50,11 @@ const getDateRange = (
 
 const setReferrals = async (
   createdUser: Member,
-  start: string,
-  end: string
+  service: ServiceInterface,
+  activeDate: {
+    start: Date
+    end: Date
+  }
 ) => {
   try {
     if (createdUser.referrer) {
@@ -59,9 +62,11 @@ const setReferrals = async (
         _id: createdUser.referrer
       })
 
-      const monthRange = getDateRange(createdUser, start, end)
-
-      const fees = await Settings.findOne()
+      const monthRange = getDateRange(
+        createdUser,
+        activeDate.start.toString(),
+        activeDate.end.toString()
+      )
 
       Promise.all(
         monthRange.map(async (date: any) => {
@@ -72,8 +77,8 @@ const setReferrals = async (
             date,
             isActive,
             fees: {
-              commissionPercent: fees.commissionPercent,
-              monthlyFee: fees.monthlyFee
+              commissionPercent: service.commission,
+              monthlyFee: service.fee
             }
           })
         })
@@ -170,21 +175,32 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               '-password'
             )
 
-            const enrolled = await UserService.find({
-              user: put_userId,
-              service: serviceId
+            const enrolled = await UserService.findOne({
+              service: serviceToEnroll._id,
+              user: put_userId
+            }).sort({ $natural: -1 })
+
+            //validate monthly enroll
+            console.log({
+              enrolled,
+              serviceToEnroll,
+              enrolledEnd: new Date(
+                new Date(enrolled?.activeDate.end).toDateString()
+              ),
+              start: new Date(new Date(start).toDateString())
             })
 
             if (
               enrolled &&
-              enrolled.length > 0 &&
-              !serviceToEnroll.isMultiple
+              new Date(new Date(enrolled.activeDate.end).toDateString()) >=
+                new Date(new Date(start).toDateString())
             ) {
               res
                 .status(401)
                 .json({ success: false, error: 'Already enrolled' })
               return
             }
+            //validate session enroll
 
             const newEnrolled = await UserService.create({
               user: put_userId,
@@ -198,7 +214,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               }
             })
 
-            // setReferrals(put_user, start, end)
+            //setReferrals(put_user, serviceToEnroll, activeDate)
             // findAndUpdateReferrals(put_user, start, end)
 
             res.status(201).json({
@@ -206,6 +222,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               data: { user: put_user, enrolled: newEnrolled }
             })
           } catch (error) {
+            console.log(error)
             res.status(500).json({ success: false, error })
           }
 

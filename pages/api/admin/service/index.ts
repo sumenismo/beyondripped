@@ -8,7 +8,7 @@ export interface ServiceFormArgs {
   name: string
   fee: number
   commission: number
-  isMultiple?: boolean
+  serviceType?: 'MONTHLY' | 'SESSION'
   _id?: string
 }
 

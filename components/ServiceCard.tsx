@@ -19,7 +19,7 @@ export interface Service {
   name: string
   fee: number
   commission: number
-  isMultiple: boolean
+  serviceType: 'MONTHLY' | 'SESSION'
   isActive?: boolean
 }
 
@@ -28,7 +28,7 @@ export const ServiceCard = (service: Service) => {
   const [deleteDialog, setOpenDeleteDialog] = useState(false)
   const { mutate: deleteService, isLoading } = useDeleteService()
 
-  const { name, fee, commission, isMultiple } = service
+  const { name, fee, commission, serviceType } = service
 
   const handleDelete = () => {
     deleteService(service, {
@@ -46,9 +46,7 @@ export const ServiceCard = (service: Service) => {
             <LabelledValue value={name} label='Name' />
           </Grid>
           <Grid item xs={4} container alignContent='flex-end'>
-            {isMultiple && (
-              <Chip size='small' label='Multiple' color='success' />
-            )}
+            <Chip size='small' label={serviceType} color='primary' />
           </Grid>
           <Grid item xs={6}>
             <LabelledValue value={`${fee}`} label='Fee' />

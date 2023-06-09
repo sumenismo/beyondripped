@@ -1,11 +1,10 @@
 import { ControlledInput } from '@/components/forms/ControlledInput'
-import { PCheckbox } from '@/components/forms/PCheckbox'
 import { PTextField } from '@/components/forms/PTextField'
 import { useService } from '@/hooks/useService'
 import { ServiceFormArgs } from '@/pages/api/admin/service'
 import { serviceFormValidationSchema } from '@/validation/serviceFormValidateionSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Grid, Paper } from '@mui/material'
+import { Button, Grid, MenuItem, Paper } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
 export interface ServiceFormProps {
@@ -25,12 +24,13 @@ export const ServiceForm = ({
       name: '',
       fee: 0,
       commission: 0,
-      isMultiple: false
+      serviceType: 'MONTHLY'
     },
     mode: 'onChange'
   })
 
   const onSubmit = (args: ServiceFormArgs) => {
+    console.log({ args })
     createService(args, {
       onSuccess: () => {
         reset({}, { keepValues: true })
@@ -59,21 +59,27 @@ export const ServiceForm = ({
             />
           </Grid>
           <Grid item xs={12} md={4}>
+            {/* @ts-ignore */}
             <ControlledInput
-              name='isMultiple'
-              placeholder='Multiple'
+              name='serviceType'
+              placeholder='Type'
               control={control}
-              component={PCheckbox}
+              component={PTextField}
               fullWidth
               inputProps={{
                 autoComplete: 'off'
               }}
-            />
+              //@ts-ignore
+              select
+            >
+              <MenuItem value='MONTHLY'>Monthly</MenuItem>
+              <MenuItem value='SESSION'>Session</MenuItem>
+            </ControlledInput>
           </Grid>
           <Grid item xs={12} md={6}>
             <ControlledInput
               name='fee'
-              placeholder='Monthly Fee'
+              placeholder='Fee'
               control={control}
               component={PTextField}
               fullWidth
