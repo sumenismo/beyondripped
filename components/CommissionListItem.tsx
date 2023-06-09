@@ -32,12 +32,6 @@ export const CommissionListItem = ({ com }: CommissionListItemProps) => {
       </TableCell>
       <TableCell>{com.member.name}</TableCell>
       <TableCell>{com.member.email}</TableCell>
-      {/* <TableCell>
-        <Chip
-          label={isActive ? 'Active' : 'Inactive'}
-          color={isActive ? 'success' : 'default'}
-        />
-      </TableCell> */}
       <TableCell>{com.referred.name}</TableCell>
       <TableCell>{com.fees.service.name}</TableCell>
       <TableCell>{getAmount()}</TableCell>
