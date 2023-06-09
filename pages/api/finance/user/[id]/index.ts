@@ -111,22 +111,9 @@ const setReferrals = async (
       })
 
       const monthRange = getMonths(activeDate.start, activeDate.end)
-      console.log(monthRange)
       Promise.all(
         monthRange.map(async (date: any) => {
           const isActive = await checkIsActive(referrerUser, date)
-          console.log({ isActive })
-          console.log({
-            member: referrerUser._id,
-            referred: user._id,
-            date,
-            isActive,
-            fees: {
-              commissionPercent: service.commission,
-              monthlyFee: service.fee,
-              service: service._id
-            }
-          })
           await Referral.create({
             member: referrerUser._id,
             referred: user._id,
@@ -267,7 +254,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               start: new Date(start),
               end: new Date(end)
             })
-            //findAndUpdateReferrals(put_user, start, end)
+
+            findAndUpdateReferrals(put_user, start, end)
 
             res.status(201).json({
               success: true,
