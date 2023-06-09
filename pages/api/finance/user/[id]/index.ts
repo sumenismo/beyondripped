@@ -191,6 +191,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             })
 
             if (
+              serviceToEnroll.serviceType === 'MONTHLY' &&
               enrolled &&
               new Date(new Date(enrolled.activeDate.end).toDateString()) >=
                 new Date(new Date(start).toDateString())
