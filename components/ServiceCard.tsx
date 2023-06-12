@@ -46,7 +46,11 @@ export const ServiceCard = (service: Service) => {
             <LabelledValue value={name} label='Name' />
           </Grid>
           <Grid item xs={4} container alignContent='flex-end'>
-            <Chip size='small' label={serviceType} color='primary' />
+            <Chip
+              size='small'
+              label={serviceType === 'SESSION' ? 'PER SESSION' : serviceType}
+              color='primary'
+            />
           </Grid>
           <Grid item xs={6}>
             <LabelledValue value={`${fee}`} label='Fee' />
