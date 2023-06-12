@@ -30,7 +30,6 @@ export const ServiceForm = ({
   })
 
   const onSubmit = (args: ServiceFormArgs) => {
-    console.log({ args })
     createService(args, {
       onSuccess: () => {
         reset({}, { keepValues: true })
@@ -73,7 +72,7 @@ export const ServiceForm = ({
               select
             >
               <MenuItem value='MONTHLY'>Monthly</MenuItem>
-              <MenuItem value='SESSION'>Session</MenuItem>
+              <MenuItem value='SESSION'>Per Session</MenuItem>
             </ControlledInput>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -91,9 +90,10 @@ export const ServiceForm = ({
           <Grid item xs={12} md={6}>
             <ControlledInput
               name='commission'
-              placeholder='Commission Percent'
+              placeholder='Percent Commission'
               control={control}
               component={PTextField}
+              prefix='%'
               fullWidth
               inputProps={{
                 autoComplete: 'off'

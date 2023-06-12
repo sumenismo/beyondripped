@@ -52,7 +52,7 @@ export const ServiceCard = (service: Service) => {
             <LabelledValue value={`${fee}`} label='Fee' />
           </Grid>
           <Grid item xs={6}>
-            <LabelledValue value={`${commission}`} label='Commission' />
+            <LabelledValue value={`${commission} %`} label='Commission' />
           </Grid>
           <Grid
             item
